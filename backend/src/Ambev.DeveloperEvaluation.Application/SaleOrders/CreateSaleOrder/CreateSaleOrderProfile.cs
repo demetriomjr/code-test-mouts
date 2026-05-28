@@ -15,5 +15,6 @@ public class CreateSaleOrderProfile : Profile
     {
         CreateMap<CreateSaleOrderCommand, SaleOrder>();
         CreateMap<SaleOrder, CreateSaleOrderResult>();
+        CreateMap<SaleOrderItem, SaleOrderItemResult>();
     }
 }
