@@ -17,7 +17,7 @@ public class GetSaleOrderResultCommon
 public class GetSaleOrderItemResultCommon
 {
     public Guid Id { get; set; }
-    public bool IsItemCancelled { get; set; }
+    public bool IsCancelled { get; set; }
     public string Ean_Gtin { get; set; }
     public string Description { get; set; }
     public decimal Price { get; set; }

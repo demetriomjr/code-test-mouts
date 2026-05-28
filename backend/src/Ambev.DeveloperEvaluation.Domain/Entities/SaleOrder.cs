@@ -39,7 +39,7 @@ public class SaleOrder : BaseEntity
                 _ => 0 //0% for <4
             };
 
-            item.TotalValue = (item.Price * item.Amount) * (1 - (item.Discount / 100));
+            item.TotalValue = (item.Price * item.Amount) * (1 - (item.Discount / 100m));
         }
 
         this.TotalSale = Products.Sum(item => item.TotalValue);

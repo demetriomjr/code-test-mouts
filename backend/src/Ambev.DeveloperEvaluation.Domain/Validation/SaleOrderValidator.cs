@@ -19,7 +19,7 @@ public class SaleOrderValidator : AbstractValidator<SaleOrder>
             .MaximumLength(50).WithMessage("Branch's Name cannot be longer than 50 characters.");
         
         RuleFor(order => order.Products )
-            .Must(products => products is not null || products.Any())
+            .Must(products => products is not null && products.Any())
             .WithMessage("An order can only be saved having at least one product.");
     }
 

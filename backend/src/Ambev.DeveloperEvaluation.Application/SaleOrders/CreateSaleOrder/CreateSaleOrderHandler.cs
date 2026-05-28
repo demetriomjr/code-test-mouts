@@ -31,9 +31,10 @@ public class CreateSaleOrderHandler : IRequestHandler<CreateSaleOrderCommand, Cr
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        int nextOrderNumber = await _orderRepository.GetLastOrderNumber(cancellationToken) + 1; //not good, beter use an incremental number generator
+        int nextOrderNumber = await _orderRepository.GetLastOrderNumber(cancellationToken) + 1;
         var order = _mapper.Map<SaleOrder>(command);
         order.OrderNumber = nextOrderNumber;
+        order.ApplyDiscountAndCalcTotal();
         var createdOrder = await _orderRepository.CreateAsync(order, cancellationToken);
         var result = _mapper.Map<CreateSaleOrderResult>(createdOrder);
         return result;
