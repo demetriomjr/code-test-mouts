@@ -32,7 +32,7 @@ public interface ISaleOrderRepository
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The last persisted order number</returns>
-    Task<int> GetLastOrderNumber(SCancellationToken cancellationToken = default);
+    Task<int> GetLastOrderNumber(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Set an order to cancelled

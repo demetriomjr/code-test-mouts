@@ -14,7 +14,7 @@ public class SaleOrderItemValidator : AbstractValidator<SaleOrderItem>
 
         RuleFor(item => item.Ean_Gtin)
             .Must(BeValidGtinOrEan)
-            .When(item => !string.IsNullOrWhiteSpace(item))
+            .When(item => !string.IsNullOrWhiteSpace(item.Ean_Gtin))
             .WithMessage("Invalid GTIN/EAN value");
 
         RuleFor(item => item.Price)

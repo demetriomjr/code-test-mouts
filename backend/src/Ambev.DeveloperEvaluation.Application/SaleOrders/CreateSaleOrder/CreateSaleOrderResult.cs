@@ -22,7 +22,7 @@ public class SaleOrderItemResult
     public string Description { get; set ;}
     public decimal Price { get; set; }
     public int Amount { get; private set; }
-    public int Discount = { get;  private set; }
+    public int Discount { get;  private set; }
     public decimal TotalValue { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

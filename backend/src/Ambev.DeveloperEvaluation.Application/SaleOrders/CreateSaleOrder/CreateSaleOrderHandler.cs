@@ -26,10 +26,10 @@ public class CreateSaleOrderHandler : IRequestHandler<CreateSaleOrderCommand, Cr
     /// <param name="command">The CreateSaleOrder command</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale order details</returns>
-    public async Task<CreateUserResult> Handle(CreateUserCommand command, CancellationToken cancellationToken)
+    public async Task<CreateUserResult> Handle(CreateSaleOrderCommand command, CancellationToken cancellationToken)
     {
         var validator = new CreateSaleOrderValidator();
-        var validationResult = await Validator.ValidateAsync(command);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);

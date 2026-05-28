@@ -1,6 +1,9 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+
+namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
 public class SaleOrderRepository : ISaleOrderRepository
 {
@@ -25,16 +28,20 @@ public class SaleOrderRepository : ISaleOrderRepository
 
     public async Task<SaleOrder> CreateAsync(SaleOrder order, CancellationToken cancellationToken = default)
     {
-        var result = await _context.SaleOrders.AddASync(order, cancellationToken);
+        var result = await _context.SaleOrders.AddAsync(order, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
-        return result;
+        return result.Entity;
     }
 
-    public async Task<int> GetLastOrderNumber(SCancellationToken cancellationToken = default)
+    public async Task<int> GetLastOrderNumber(CancellationToken cancellationToken = default)
     {
-        var result = await _context.SaleORders.OrderByDescending(x => x.OrderNumber)
+        var result = await _context.SaleOrders.OrderByDescending(x => x.OrderNumber)
                                               .FirstOrDefaultAsync(cancellationToken);
-        return result.OrderNumber ?? 0;
+
+        if(result is null)
+            return 0;
+
+        return result.OrderNumber;
     }
 
     public async Task<bool> CancelOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
@@ -57,7 +64,7 @@ public class SaleOrderRepository : ISaleOrderRepository
         if(order is null)
             return false;
 
-        var item = await order.Products.FirstOrDefaultAsync(x => x.Id.Equals(itemId), cancellationToken);
+        var item = order.Products.FirstOrDefault(x => x.Id.Equals(itemId));
 
         if(item is null)
             return false;

@@ -3,7 +3,7 @@ using Ambev.DeveloperEvaluation.Domain.Validation;
 using Ambev.DeveloperEvaluation.Domain.Validation;
 using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.Application.Users.CreateSaleOrder;
+namespace Ambev.DeveloperEvaluation.Application.SaleOrders.CreateSaleOrder;
 
 public class CreateSaleOrderValidator : AbstractValidator<CreateSaleOrderCommand>
 {

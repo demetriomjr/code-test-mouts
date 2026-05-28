@@ -1,4 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Validation;
+using System.Linq;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
@@ -6,15 +9,15 @@ public class SaleOrder : BaseEntity
 {
     public int OrderNumber { get; init; } = 0;
     public DateTime Date { get; init; } = DateTime.UtcNow;
-    public string CustomerName { get; set; } = string.Empty
+    public string CustomerName { get; set; } = string.Empty;
     public string BranchName { get; set; } = string.Empty;
-    public decimal TotalSale  { get; private set; }
+    public decimal TotalSale  { get; set; } = 0.00m;
     public IEnumerable<SaleOrderItem> Products { get; set; } = [];
-    public bool IsCancelled { get; private set; } = false;
+    public bool IsCancelled { get; set; } = false;
 
     public ValidationResultDetail Validate()
     {
-        var validator = new SaleOrderItemValidator();
+        var validator = new SaleOrderValidator();
         var result = validator.Validate(this);
         return new ValidationResultDetail
         {
@@ -23,7 +26,7 @@ public class SaleOrder : BaseEntity
         };
     }
 
-    public void IsCancelled(bool cancelled) => this.IsCancelled = cancelled;
+    public void SetIsCancelled(bool cancelled) => this.IsCancelled = cancelled;
 
     public void ApplyDiscountAndCalcTotal()
     {
@@ -31,12 +34,12 @@ public class SaleOrder : BaseEntity
         {
             item.Discount = item.Amount switch
             {
-                >= 4 and < 10 => 10; //10% for 4-9
-                >= 10 and <= 20 => 20; //20% for 10-20
-                _ => 0; //0% for <4
-            }
+                >= 4 and < 10 => 10, //10% for 4-9
+                >= 10 and <= 20 => 20, //20% for 10-20
+                _ => 0 //0% for <4
+            };
 
-            item.TotalValue = (item.Price * item.Amount) * (1 - (Item.Discount / 100));
+            item.TotalValue = (item.Price * item.Amount) * (1 - (item.Discount / 100));
         }
 
         this.TotalSale = Products.Sum(item => item.TotalValue);
