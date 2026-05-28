@@ -1,4 +1,4 @@
-namespace Ambev.DeveloperEvaluation.Application.Users.CreateSaleOrder;
+namespace Ambev.DeveloperEvaluation.Application.SaleOrders.CreateSaleOrder;
 
 public class CreateSaleOrderResult
 {
@@ -7,9 +7,9 @@ public class CreateSaleOrderResult
     public DateTime Date { get; init; }
     public string CustomerName { get; set; }
     public string BranchName { get; set; }
-    public decimal TotalSale  { get; set; }
+    public decimal TotalSale  { get; private set; }
     public IEnumerable<SaleOrderItemResult> Products { get; set; }
-    public bool IsCancelled { get; set; }
+    public bool IsCancelled { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
@@ -21,9 +21,9 @@ public class SaleOrderItemResult
     public string Ean_Gtin { get; set;}
     public string Description { get; set ;}
     public decimal Price { get; set; }
-    public int Amount { get; set; }
-    public int Discount { get;  set; }
-    public decimal TotalValue { get; set; }
+    public int Amount { get; private set; }
+    public int Discount { get;  private set; }
+    public decimal TotalValue { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

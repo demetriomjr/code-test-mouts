@@ -14,10 +14,11 @@ public class SaleOrderRepository : ISaleOrderRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<SaleOrder>> GetOrders(CancellationToken cancellationToken = default)
+    public async Task<(int totalPages, IEnumerable<SaleOrder> orders)> GetOrders(int page, int amountPerPage, CancellationToken cancellationToken = default)
     {
-        var result = await _context.SaleOrders.ToListAsync(cancellationToken);
-        return result;
+        var result = await _context.SaleOrders.Skip((page - 1) * amountPerPage).Take(amountPerPage).ToListAsync(cancellationToken);
+        var totalPages = await _context.SaleOrders.CountAsync(cancellationToken) / amountPerPage;
+        return (totalPages, result);
     }
 
     public async Task<SaleOrder> GetOrderById(Guid id, CancellationToken cancellationToken = default)

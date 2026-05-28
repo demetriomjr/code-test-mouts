@@ -9,7 +9,7 @@ public interface ISaleOrderRepository
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale order</returns>
-    Task<IEnumerable<SaleOrder>> GetOrders(CancellationToken cancellationToken = default);
+    Task<(int totalPages, IEnumerable<SaleOrder> orders)> GetOrders(int page, int amountPerPage, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets a Sale Order by it's ID

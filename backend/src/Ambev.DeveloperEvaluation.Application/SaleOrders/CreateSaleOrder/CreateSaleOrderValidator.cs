@@ -1,5 +1,4 @@
-using Ambev.DeveloperEvaluation.Domain.Enums;
-using Ambev.DeveloperEvaluation.Domain.Validation;
+
 using Ambev.DeveloperEvaluation.Domain.Validation;
 using FluentValidation;
 
@@ -27,7 +26,7 @@ public class CreateSaleOrderValidator : AbstractValidator<CreateSaleOrderCommand
             .ChildRules(item => {
                 item.RuleFor(item => item.Ean_Gtin)
                     .Must(SaleOrderItemValidator.BeValidGtinOrEan)
-                    .When(item => !string.IsNullOrWhiteSpace(item))
+                    .When(item => !string.IsNullOrWhiteSpace(item.Ean_Gtin))
                     .WithMessage("Invalid GTIN/EAN value");
 
                 item.RuleFor(item => item.Price)

@@ -1,9 +1,0 @@
-namespace Ambev.DeveloperEvaluation.Application.Users.GetSaleOrders;
-
-public class GetSaleOrdersResult
-{
-    public int CurrentPage { get; set; }
-    public int TotalPages { get; set; }
-    public int AmountPerPage { get; set; }
-    public IEnumerable<object> Orders { get; set; }
-}

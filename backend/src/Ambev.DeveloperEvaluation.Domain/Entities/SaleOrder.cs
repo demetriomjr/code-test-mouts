@@ -7,7 +7,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
 public class SaleOrder : BaseEntity
 {
-    public int OrderNumber { get; init; } = 0;
+    public int OrderNumber { get; set; } = 0;
     public DateTime Date { get; init; } = DateTime.UtcNow;
     public string CustomerName { get; set; } = string.Empty;
     public string BranchName { get; set; } = string.Empty;
