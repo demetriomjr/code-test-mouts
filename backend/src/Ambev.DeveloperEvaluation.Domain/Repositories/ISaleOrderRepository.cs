@@ -24,7 +24,6 @@ public interface ISaleOrderRepository
         DateTime? dateFrom = null,
         DateTime? dateTo = null,
         string? orderBy = null,
-        string? orderDirection = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

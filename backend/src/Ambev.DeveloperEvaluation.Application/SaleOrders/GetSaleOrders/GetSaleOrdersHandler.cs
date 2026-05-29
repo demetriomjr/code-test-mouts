@@ -52,7 +52,6 @@ public class GetSaleOrdersHandler : IRequestHandler<GetSaleOrdersCommand, GetSal
             command.DateFrom,
             command.DateTo,
             command.OrderBy,
-            command.OrderDirection,
             cancellationToken);
 
         var orders = _mapper.Map<IEnumerable<GetSaleOrderResultCommon>>(repoResult.orders);

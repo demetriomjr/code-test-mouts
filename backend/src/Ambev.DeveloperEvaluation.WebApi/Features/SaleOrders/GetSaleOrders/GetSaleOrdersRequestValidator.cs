@@ -7,14 +7,13 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleOrders.GetSaleOrders;
 /// </summary>
 public class GetSaleOrdersRequestValidator : AbstractValidator<GetSaleOrdersRequest>
 {
+    private static readonly string[] AllowedOrderFields = ["ordernumber", "date", "customername", "branchname", "createdat", "totalsale"];
+
     /// <summary>
     /// Initializes validation rules for GetSaleOrdersRequest.
     /// </summary>
     public GetSaleOrdersRequestValidator()
     {
-        var allowedOrderBy = new[] { "ordernumber", "date", "customername", "branchname", "createdat", "totalsale" };
-        var allowedOrderDirection = new[] { "asc", "desc" };
-
         RuleFor(x => x.CurrentPage)
             .GreaterThan(0)
             .WithMessage("CurrentPage must be greater than 0.");
@@ -32,11 +31,35 @@ public class GetSaleOrdersRequestValidator : AbstractValidator<GetSaleOrdersRequ
             .WithMessage("DateFrom must be less than or equal to DateTo.");
 
         RuleFor(x => x.OrderBy)
-            .Must(value => string.IsNullOrWhiteSpace(value) || allowedOrderBy.Contains(value.Trim().ToLowerInvariant()))
-            .WithMessage("OrderBy must be one of: orderNumber, date, customerName, branchName, createdAt, totalSale.");
+            .Must(BeValidOrderBy)
+            .WithMessage("OrderBy must follow: field [asc|ascii|desc].");
+    }
 
-        RuleFor(x => x.OrderDirection)
-            .Must(value => string.IsNullOrWhiteSpace(value) || allowedOrderDirection.Contains(value.Trim().ToLowerInvariant()))
-            .WithMessage("OrderDirection must be either asc or desc.");
+    private static bool BeValidOrderBy(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return true;
+
+        var raw = value.Trim().ToLowerInvariant();
+        var tokens = raw.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (tokens.Length == 1)
+        {
+            if (AllowedOrderFields.Contains(tokens[0]))
+                return true;
+
+            foreach (var field in AllowedOrderFields)
+            {
+                if (raw == $"{field}asc" || raw == $"{field}ascii" || raw == $"{field}desc")
+                    return true;
+            }
+
+            return false;
+        }
+
+        if (tokens.Length == 2)
+            return AllowedOrderFields.Contains(tokens[0]) && (tokens[1] is "asc" or "ascii" or "desc");
+
+        return false;
     }
 }

@@ -58,12 +58,7 @@ public class GetSaleOrdersRequest
     public DateTime? DateTo { get; set; }
 
     /// <summary>
-    /// Field used for ordering. Supported values: orderNumber, date, customerName, branchName, createdAt, totalSale.
+    /// Field used for ordering. Supported formats: "field", "field asc", "field desc".
     /// </summary>
     public string? OrderBy { get; set; }
-
-    /// <summary>
-    /// Ordering direction. Supported values: asc, desc.
-    /// </summary>
-    public string? OrderDirection { get; set; } = "desc";
 }

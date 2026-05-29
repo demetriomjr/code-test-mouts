@@ -62,9 +62,4 @@ public class GetSaleOrdersCommand : IRequest<GetSaleOrdersResult>
     /// Field used for ordering.
     /// </summary>
     public string? OrderBy { get; set; }
-
-    /// <summary>
-    /// Ordering direction.
-    /// </summary>
-    public string? OrderDirection { get; set; } = "desc";
 }

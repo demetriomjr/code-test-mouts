@@ -41,7 +41,6 @@ public class SaleOrderRepository : ISaleOrderRepository
         DateTime? dateFrom = null,
         DateTime? dateTo = null,
         string? orderBy = null,
-        string? orderDirection = null,
         CancellationToken cancellationToken = default)
     {
         IQueryable<SaleOrder> query = _context.SaleOrders.AsNoTracking();
@@ -70,8 +69,7 @@ public class SaleOrderRepository : ISaleOrderRepository
         if (dateTo.HasValue)
             query = query.Where(x => x.Date <= dateTo.Value);
 
-        var isDesc = !string.Equals(orderDirection, "asc", StringComparison.OrdinalIgnoreCase);
-        var orderByValue = orderBy?.Trim().ToLowerInvariant();
+        var (orderByValue, isDesc) = ParseOrderBy(orderBy);
 
         query = orderByValue switch
         {
@@ -97,6 +95,40 @@ public class SaleOrderRepository : ISaleOrderRepository
         }
 
         return (totalPages, result);
+    }
+
+    private static (string orderByField, bool isDesc) ParseOrderBy(string? orderBy)
+    {
+        if (string.IsNullOrWhiteSpace(orderBy))
+            return ("date", false);
+
+        var raw = orderBy.Trim().ToLowerInvariant();
+        var tokens = raw.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+        if (tokens.Length == 2)
+        {
+            var desc = tokens[1] == "desc";
+            return (tokens[0], desc);
+        }
+
+        if (tokens.Length == 1)
+        {
+            var token = tokens[0];
+            var fields = new[] { "ordernumber", "date", "customername", "branchname", "createdat", "totalsale" };
+
+            foreach (var field in fields)
+            {
+                if (token == $"{field}desc")
+                    return (field, true);
+
+                if (token == $"{field}asc" || token == $"{field}ascii")
+                    return (field, false);
+            }
+
+            return (token, false);
+        }
+
+        return ("date", false);
     }
 
     /// <summary>
