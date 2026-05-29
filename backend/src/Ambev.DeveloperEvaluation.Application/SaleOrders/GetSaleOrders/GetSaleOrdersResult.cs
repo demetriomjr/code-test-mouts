@@ -21,5 +21,5 @@ public class GetSaleOrdersResult
     /// <summary>
     /// The list of sale orders for the current page
     /// </summary>
-    public IEnumerable<GetSaleOrderResultCommon> Orders { get; set; }
+    public IEnumerable<GetSaleOrderResultCommon> Orders { get; set; } = [];
 }

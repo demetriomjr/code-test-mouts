@@ -41,7 +41,7 @@ public class UpdateSaleOrderRequestValidator : AbstractValidator<UpdateSaleOrder
 
                 item.RuleFor(x => x.Price)
                     .GreaterThan(0).WithMessage("Price cannot be zero.")
-                    .ScalePrecision(2, 18).WithMessage("Please, use only 2 decimal cases for cents");
+                    .PrecisionScale(18, 2, false).WithMessage("Please, use only 2 decimal cases for cents");
 
                 item.RuleFor(x => x.Description)
                     .MinimumLength(3).WithMessage("Description must be at least 3 characters long.")

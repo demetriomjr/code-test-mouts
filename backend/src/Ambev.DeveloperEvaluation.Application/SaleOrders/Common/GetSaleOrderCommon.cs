@@ -25,12 +25,12 @@ public class GetSaleOrderResultCommon
     /// <summary>
     /// The customer's name for the sale order
     /// </summary>
-    public string CustomerName { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
     /// The branch name where the sale occurred
     /// </summary>
-    public string BranchName { get; set; }
+    public string BranchName { get; set; } = string.Empty;
 
     /// <summary>
     /// The total sale amount after discounts
@@ -40,7 +40,7 @@ public class GetSaleOrderResultCommon
     /// <summary>
     /// The list of products in the sale order
     /// </summary>
-    public IEnumerable<GetSaleOrderItemResultCommon> Products { get; set; }
+    public IEnumerable<GetSaleOrderItemResultCommon> Products { get; set; } = [];
 
     /// <summary>
     /// Indicates whether the sale order has been cancelled
@@ -76,12 +76,12 @@ public class GetSaleOrderItemResultCommon
     /// <summary>
     /// The GTIN/EAN code of the product
     /// </summary>
-    public string EanGtin { get; set; }
+    public string EanGtin { get; set; } = string.Empty;
 
     /// <summary>
     /// The description of the product
     /// </summary>
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     /// <summary>
     /// The unit price of the product

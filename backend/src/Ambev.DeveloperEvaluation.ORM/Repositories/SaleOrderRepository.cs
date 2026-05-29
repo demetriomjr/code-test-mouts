@@ -1,4 +1,5 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -28,11 +29,73 @@ public class SaleOrderRepository : ISaleOrderRepository
     /// <param name="amountPerPage">The number of orders per page</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A tuple containing the total number of pages and the list of orders</returns>
-    public async Task<(int totalPages, IEnumerable<SaleOrder> orders)> GetOrders(int page, int amountPerPage, CancellationToken cancellationToken = default)
+    public async Task<(int totalPages, IEnumerable<SaleOrder> orders)> GetOrders(
+        int page,
+        int amountPerPage,
+        bool includeProductList = false,
+        int? orderNumberFrom = null,
+        int? orderNumberTo = null,
+        string? customerName = null,
+        string? branchName = null,
+        CancelStatus? cancelStatus = null,
+        DateTime? dateFrom = null,
+        DateTime? dateTo = null,
+        string? orderBy = null,
+        string? orderDirection = null,
+        CancellationToken cancellationToken = default)
     {
-        var result = await _context.SaleOrders.Include(x => x.Products)
-                                              .Skip((page - 1) * amountPerPage).Take(amountPerPage).ToListAsync(cancellationToken);
-        var totalPages = await _context.SaleOrders.CountAsync(cancellationToken) / amountPerPage;
+        IQueryable<SaleOrder> query = _context.SaleOrders.AsNoTracking();
+
+        if (includeProductList)
+            query = query.Include(x => x.Products);
+
+        if (orderNumberFrom.HasValue)
+            query = query.Where(x => x.OrderNumber >= orderNumberFrom.Value);
+
+        if (orderNumberTo.HasValue)
+            query = query.Where(x => x.OrderNumber <= orderNumberTo.Value);
+
+        if (!string.IsNullOrWhiteSpace(customerName))
+            query = query.Where(x => EF.Functions.ILike(x.CustomerName, $"%{customerName.Trim()}%"));
+
+        if (!string.IsNullOrWhiteSpace(branchName))
+            query = query.Where(x => EF.Functions.ILike(x.BranchName, $"%{branchName.Trim()}%"));
+
+        if (cancelStatus.HasValue)
+            query = query.Where(x => x.CancelStatus == cancelStatus.Value);
+
+        if (dateFrom.HasValue)
+            query = query.Where(x => x.Date >= dateFrom.Value);
+
+        if (dateTo.HasValue)
+            query = query.Where(x => x.Date <= dateTo.Value);
+
+        var isDesc = !string.Equals(orderDirection, "asc", StringComparison.OrdinalIgnoreCase);
+        var orderByValue = orderBy?.Trim().ToLowerInvariant();
+
+        query = orderByValue switch
+        {
+            "ordernumber" => isDesc ? query.OrderByDescending(x => x.OrderNumber) : query.OrderBy(x => x.OrderNumber),
+            "customername" => isDesc ? query.OrderByDescending(x => x.CustomerName) : query.OrderBy(x => x.CustomerName),
+            "branchname" => isDesc ? query.OrderByDescending(x => x.BranchName) : query.OrderBy(x => x.BranchName),
+            "createdat" => isDesc ? query.OrderByDescending(x => x.CreatedAt) : query.OrderBy(x => x.CreatedAt),
+            "totalsale" => isDesc ? query.OrderByDescending(x => x.TotalSale) : query.OrderBy(x => x.TotalSale),
+            _ => isDesc ? query.OrderByDescending(x => x.Date).ThenByDescending(x => x.CreatedAt) : query.OrderBy(x => x.Date).ThenBy(x => x.CreatedAt)
+        };
+
+        var totalCount = await query.CountAsync(cancellationToken);
+        var totalPages = totalCount == 0 ? 0 : (int)Math.Ceiling(totalCount / (double)amountPerPage);
+
+        var result = await query.Skip((page - 1) * amountPerPage)
+            .Take(amountPerPage)
+            .ToListAsync(cancellationToken);
+
+        if (!includeProductList)
+        {
+            foreach (var order in result)
+                order.Products = [];
+        }
+
         return (totalPages, result);
     }
 

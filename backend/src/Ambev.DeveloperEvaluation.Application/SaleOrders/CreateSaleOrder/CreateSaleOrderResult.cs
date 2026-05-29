@@ -25,12 +25,12 @@ public class CreateSaleOrderResult
     /// <summary>
     /// Gets or sets the customer name associated with the order.
     /// </summary>
-    public string CustomerName { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the branch name where the sale was made.
     /// </summary>
-    public string BranchName { get; set; }
+    public string BranchName { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the total sale amount after discounts.
@@ -40,7 +40,7 @@ public class CreateSaleOrderResult
     /// <summary>
     /// Gets or sets the list of items that compose the sale order.
     /// </summary>
-    public IEnumerable<SaleOrderItemResult> Products { get; set; }
+    public IEnumerable<SaleOrderItemResult> Products { get; set; } = [];
 
     /// <summary>
     /// Gets or sets a value indicating whether the order is cancelled.
@@ -76,12 +76,12 @@ public class SaleOrderItemResult
     /// <summary>
     /// Gets or sets the GTIN/EAN code of the product.
     /// </summary>
-    public string EanGtin { get; set;}
+    public string EanGtin { get; set;} = string.Empty;
 
     /// <summary>
     /// Gets or sets the product description.
     /// </summary>
-    public string Description { get; set ;}
+    public string Description { get; set ;} = string.Empty;
 
     /// <summary>
     /// Gets or sets the product unit price.

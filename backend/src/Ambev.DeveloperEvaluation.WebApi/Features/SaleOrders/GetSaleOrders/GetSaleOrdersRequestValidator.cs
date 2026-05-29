@@ -1,16 +1,16 @@
 using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrders;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleOrders.GetSaleOrders;
 
 /// <summary>
-/// Validator for GetSaleOrdersCommand.
+/// Validator for GetSaleOrdersRequest.
 /// </summary>
-public class GetSaleOrdersValidator : AbstractValidator<GetSaleOrdersCommand>
+public class GetSaleOrdersRequestValidator : AbstractValidator<GetSaleOrdersRequest>
 {
     /// <summary>
-    /// Initializes validation rules for GetSaleOrdersCommand.
+    /// Initializes validation rules for GetSaleOrdersRequest.
     /// </summary>
-    public GetSaleOrdersValidator()
+    public GetSaleOrdersRequestValidator()
     {
         var allowedOrderBy = new[] { "ordernumber", "date", "customername", "branchname", "createdat", "totalsale" };
         var allowedOrderDirection = new[] { "asc", "desc" };

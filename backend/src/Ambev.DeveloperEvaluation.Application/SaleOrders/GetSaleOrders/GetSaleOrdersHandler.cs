@@ -2,6 +2,7 @@ using AutoMapper;
 using MediatR;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Ambev.DeveloperEvaluation.Application.SaleOrders.Common;
+using FluentValidation;
 using System.Collections.Generic;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrders;
@@ -15,7 +16,7 @@ public class GetSaleOrdersHandler : IRequestHandler<GetSaleOrdersCommand, GetSal
     private readonly IMapper _mapper;
 
     /// <summary>
-    /// Initializes a new instance of GetSaleOrdersHandler
+    /// Initializes a new instance of the GetSaleOrdersHandler
     /// </summary>
     /// <param name="orderRepository">The sale order repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
@@ -33,7 +34,27 @@ public class GetSaleOrdersHandler : IRequestHandler<GetSaleOrdersCommand, GetSal
     /// <returns>A paginated list of sale orders</returns>
     public async Task<GetSaleOrdersResult> Handle(GetSaleOrdersCommand command, CancellationToken cancellationToken)
     {
-        var repoResult = await _orderRepository.GetOrders(command.CurrentPage, command.PageSize, cancellationToken);
+        var validator = new GetSaleOrdersValidator();
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
+
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
+        var repoResult = await _orderRepository.GetOrders(
+            command.CurrentPage,
+            command.PageSize,
+            command.IncludeProductList,
+            command.OrderNumberFrom,
+            command.OrderNumberTo,
+            command.CustomerName,
+            command.BranchName,
+            command.CancelStatus,
+            command.DateFrom,
+            command.DateTo,
+            command.OrderBy,
+            command.OrderDirection,
+            cancellationToken);
+
         var orders = _mapper.Map<IEnumerable<GetSaleOrderResultCommon>>(repoResult.orders);
         return new GetSaleOrdersResult
         {

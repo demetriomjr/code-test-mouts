@@ -60,7 +60,7 @@ public class UpdateSaleOrderItemCommand
     public int Amount { get; set; }
 
     /// <summary>
-    /// The cancellation status of this item.
+    /// The cancellation status of this item from options [Canceled | NotCanceled].
     /// </summary>
     public CancelStatus CancelStatus { get; set; }
 }

@@ -10,6 +10,7 @@ public class SaleOrder : BaseEntity
 {
     public int OrderNumber { get; set; } = 0;
     public DateTime Date { get; init; } = DateTime.UtcNow;
+    //MVP is gonna use a string as Customer due to time constraints, but a Customer Entity should be a better fit.
     public string CustomerName { get; set; } = string.Empty;
     public string BranchName { get; set; } = string.Empty;
     public decimal TotalSale  { get; set; } = 0.00m;

@@ -41,12 +41,12 @@ public class CreateSaleOrderItemCommand
     /// <summary>
     /// Gets or sets the product GTIN/EAN code.
     /// </summary>
-    public string EanGtin { get; set;}
+    public string EanGtin { get; set;} = string.Empty;
 
     /// <summary>
     /// Gets or sets the product description.
     /// </summary>
-    public string Description { get; set ;}
+    public string Description { get; set ;} = string.Empty;
 
     /// <summary>
     /// Gets or sets the unit price for the product.
