@@ -1,12 +1,11 @@
 using Ambev.DeveloperEvaluation.Application.SaleOrders.Common;
-using System.Collections.Generic;
 
-namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrders;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleOrders.GetSaleOrders;
 
 /// <summary>
-/// Result for the paginated sale orders query
+/// API response model for the paginated sale orders query
 /// </summary>
-public class GetSaleOrdersResult
+public class GetSaleOrdersResponse
 {
     /// <summary>
     /// The current page number

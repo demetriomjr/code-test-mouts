@@ -3,6 +3,10 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleOrders.CreateSaleOrder;
 /// <summary>
 /// Represents a request to create a new sale order in the system.
 /// </summary>
+/// <remarks>
+/// This request provides the customer and branch information plus
+/// all products required to create a new sale order.
+/// </remarks>
 public class CreateSaleOrderRequest
 {
     /// <summary>

@@ -5,10 +5,12 @@ namespace Ambev.DeveloperEvaluation.Domain.Repositories;
 public interface ISaleOrderRepository
 {
     /// <summary>
-    /// Gets all available orders in the database
+    /// Retrieves a paginated list of sale orders
     /// </summary>
+    /// <param name="page">The page number to retrieve (1-based)</param>
+    /// <param name="amountPerPage">The number of orders per page</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>The created sale order</returns>
+    /// <returns>A tuple containing the total number of pages and the list of orders</returns>
     Task<(int totalPages, IEnumerable<SaleOrder> orders)> GetOrders(int page, int amountPerPage, CancellationToken cancellationToken = default);
 
     /// <summary>

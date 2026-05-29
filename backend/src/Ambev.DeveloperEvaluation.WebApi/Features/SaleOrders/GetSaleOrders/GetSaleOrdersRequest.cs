@@ -1,11 +1,9 @@
-using MediatR;
-
-namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrders;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleOrders.GetSaleOrders;
 
 /// <summary>
-/// Command for retrieving a paginated list of sale orders
+/// Request model for retrieving a paginated list of sale orders
 /// </summary>
-public class GetSaleOrdersCommand : IRequest<GetSaleOrdersResult>
+public class GetSaleOrdersRequest
 {
     /// <summary>
     /// The current page number to retrieve

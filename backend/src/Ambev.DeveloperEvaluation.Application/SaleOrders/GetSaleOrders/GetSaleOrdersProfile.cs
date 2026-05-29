@@ -14,7 +14,6 @@ public class GetSaleOrdersProfile : Profile
     /// </summary>
     public GetSaleOrdersProfile()
     {
-        CreateMap<GetSaleOrdersCommand, SaleOrder>();
         CreateMap<SaleOrder, GetSaleOrderResultCommon>();
         CreateMap<SaleOrderItem, GetSaleOrderItemResultCommon>();
     }

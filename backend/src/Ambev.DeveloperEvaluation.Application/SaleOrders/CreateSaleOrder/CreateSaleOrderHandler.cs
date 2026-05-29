@@ -6,6 +6,9 @@ using Ambev.DeveloperEvaluation.Domain.Entities;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.CreateSaleOrder;
 
+/// <summary>
+/// Handler for processing <see cref="CreateSaleOrderCommand"/> requests.
+/// </summary>
 public class CreateSaleOrderHandler : IRequestHandler<CreateSaleOrderCommand, CreateSaleOrderResult>
 {
     private readonly IMapper _mapper;

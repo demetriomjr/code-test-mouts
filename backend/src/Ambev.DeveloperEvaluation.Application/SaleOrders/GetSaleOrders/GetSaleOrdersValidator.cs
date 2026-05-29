@@ -1,1 +1,1 @@
-//just a placeholder to follow the currenct architecture. There is not need to a GET validator here 
+//just a placeholder to follow the currenct architecture. There is not need to a GET validator here     

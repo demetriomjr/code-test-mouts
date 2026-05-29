@@ -4,8 +4,25 @@ using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.CreateSaleOrder;
 
+/// <summary>
+/// Validator for <see cref="CreateSaleOrderCommand"/> that defines sale order creation rules.
+/// </summary>
 public class CreateSaleOrderValidator : AbstractValidator<CreateSaleOrderCommand>
 {
+    /// <summary>
+    /// Initializes a new instance of <see cref="CreateSaleOrderValidator"/> with validation rules.
+    /// </summary>
+    /// <remarks>
+    /// Validation rules include:
+    /// - CustomerName: Required, length between 3 and 50 characters
+    /// - BranchName: Required, length between 3 and 50 characters
+    /// - Products: Must contain at least one item
+    /// - Each product item:
+    ///   - Ean_Gtin: Must be a valid GTIN/EAN format when provided
+    ///   - Price: Must be greater than zero and have up to 2 decimal places
+    ///   - Description: Length between 3 and 50 characters
+    ///   - Amount: Must be greater than zero and less than 20
+    /// </remarks>
     public CreateSaleOrderValidator()
     {
         RuleFor(order => order.CustomerName)

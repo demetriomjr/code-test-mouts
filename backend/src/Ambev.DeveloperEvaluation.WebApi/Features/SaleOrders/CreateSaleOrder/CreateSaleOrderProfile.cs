@@ -13,8 +13,11 @@ public class CreateSaleOrderProfile : Profile
     /// </summary>
     public CreateSaleOrderProfile()
     {
+        // Request to application command mappings.
         CreateMap<CreateSaleOrderRequest, CreateSaleOrderCommand>();
         CreateMap<CreateSaleOrderItemRequest, CreateSaleOrderItemCommand>();
+
+        // Application result to API response mappings.
         CreateMap<CreateSaleOrderResult, CreateSaleOrderResponse>();
         CreateMap<SaleOrderItemResult, SaleOrderItemResponse>();
     }
