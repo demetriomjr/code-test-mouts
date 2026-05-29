@@ -2,7 +2,7 @@
 
 ### Sale Orders
 
-#### GET /sale-orders
+#### GET /api/SaleOrders
 - Description: Retrieve a paginated list of sale orders
 - Query Parameters:
   - `currentPage` (optional): Page number for pagination (default: 1)
@@ -51,7 +51,7 @@
   }
   ```
 
-#### POST /sale-orders
+#### POST /api/SaleOrders
 - Description: Create a new sale order
 - Request Body:
   ```json
@@ -97,7 +97,7 @@
   }
   ```
 
-#### GET /sale-orders/{id}
+#### GET /api/SaleOrders/{id}
 - Description: Retrieve a specific sale order by ID
 - Path Parameters:
   - `id`: Sale order ID
@@ -130,7 +130,7 @@
   }
   ```
 
-#### PUT /sale-orders/{id}
+#### PUT /api/SaleOrders/{id}
 - Description: Update a specific sale order
 - Path Parameters:
   - `id`: Sale order ID
@@ -183,7 +183,7 @@
   }
   ```
 
-#### DELETE /sale-orders/{id}
+#### DELETE /api/SaleOrders/{id}
 - Description: Delete a specific sale order
 - Path Parameters:
   - `id`: Sale order ID
