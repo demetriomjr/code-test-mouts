@@ -1,8 +1,11 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
+using Ambev.DeveloperEvaluation.Domain.Enums;
+using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.UpdateSaleOrder;
 
@@ -13,16 +16,18 @@ public class UpdateSaleOrderHandler : IRequestHandler<UpdateSaleOrderCommand, Up
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<UpdateSaleOrderHandler> _logger;
 
     /// <summary>
     /// Initializes a new instance of UpdateSaleOrderHandler.
     /// </summary>
     /// <param name="saleOrderRepository">The sale order repository.</param>
     /// <param name="mapper">The AutoMapper instance.</param>
-    public UpdateSaleOrderHandler(ISaleOrderRepository saleOrderRepository, IMapper mapper)
+    public UpdateSaleOrderHandler(ISaleOrderRepository saleOrderRepository, IMapper mapper, ILogger<UpdateSaleOrderHandler> logger)
     {
         _saleOrderRepository = saleOrderRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     /// <summary>
@@ -55,6 +60,22 @@ public class UpdateSaleOrderHandler : IRequestHandler<UpdateSaleOrderCommand, Up
         existingOrder.ApplyDiscountAndCalcTotal();
 
         var updatedOrder = await _saleOrderRepository.UpdateAsync(existingOrder, cancellationToken);
+
+        var saleModifiedEvent = new SaleModifiedEvent(updatedOrder.Id, updatedOrder.OrderNumber);
+        _logger.LogInformation("DomainEvent {EventType} {@Event}", nameof(SaleModifiedEvent), saleModifiedEvent);
+
+        if (updatedOrder.CancelStatus == CancelStatus.Cancelled)
+        {
+            var saleCancelledEvent = new SaleCancelledEvent(updatedOrder.Id, updatedOrder.OrderNumber);
+            _logger.LogInformation("DomainEvent {EventType} {@Event}", nameof(SaleCancelledEvent), saleCancelledEvent);
+        }
+
+        foreach (var item in updatedOrder.Products.Where(x => x.CancelStatus == CancelStatus.Cancelled))
+        {
+            var itemCancelledEvent = new ItemCancelledEvent(updatedOrder.Id, updatedOrder.OrderNumber, item.Id);
+            _logger.LogInformation("DomainEvent {EventType} {@Event}", nameof(ItemCancelledEvent), itemCancelledEvent);
+        }
+
         return _mapper.Map<UpdateSaleOrderResult>(updatedOrder);
     }
 }
