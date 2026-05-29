@@ -1,0 +1,1 @@
+//Placeholder file for result format, since we are sharing the result format in a Common object in both GET routes

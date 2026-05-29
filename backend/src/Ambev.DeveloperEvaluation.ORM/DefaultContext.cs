@@ -19,20 +19,23 @@ public class DefaultContext : DbContext
     public override async Task<int> SaveChangesAsync(
     CancellationToken cancellationToken = default)
     {
-        var entries = ChangeTracker
-            .Entries<BaseEntity>();
+        var entries = ChangeTracker.Entries<BaseEntity>();
+        var now = DateTime.UtcNow;
 
         foreach (var entry in entries)
         {
             if (entry.State == EntityState.Added)
             {
-                entry.Entity.CreatedAt = DateTime.UtcNow;
-                entry.Entity.UpdatedAt = DateTime.UtcNow;
+                if (entry.Entity.Id == Guid.Empty)
+                    entry.Entity.Id = Guid.NewGuid();
+
+                entry.Entity.CreatedAt = now;
+                entry.Entity.UpdatedAt = now;
             }
 
             if (entry.State == EntityState.Modified)
             {
-                entry.Entity.UpdatedAt = DateTime.UtcNow;
+                entry.Entity.UpdatedAt = now;
             }
         }
 

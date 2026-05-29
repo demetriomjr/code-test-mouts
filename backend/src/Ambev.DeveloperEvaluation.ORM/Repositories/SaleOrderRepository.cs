@@ -42,9 +42,11 @@ public class SaleOrderRepository : ISaleOrderRepository
     /// <param name="id">The unique identifier of the sale order</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The sale order if found, otherwise null</returns>
-    public async Task<SaleOrder> GetOrderById(Guid id, CancellationToken cancellationToken = default)
+    public async Task<SaleOrder?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var result = await _context.SaleOrders.FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
+        var result = await _context.SaleOrders
+            .Include(x => x.Products)
+            .FirstOrDefaultAsync(x => x.Id.Equals(id), cancellationToken);
         return result;
     }
 
@@ -77,47 +79,14 @@ public class SaleOrderRepository : ISaleOrderRepository
         return result.OrderNumber;
     }
 
-    /// <summary>
-    /// Cancels a sale order by setting its IsCancelled flag
-    /// </summary>
-    /// <param name="orderId">The unique identifier of the order to cancel</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>True if the order was cancelled, false if not found</returns>
-    public async Task<bool> CancelOrderAsync(Guid orderId, CancellationToken cancellationToken = default)
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var order = await _context.SaleOrders.FirstOrDefaultAsync(x => x.Id.Equals(orderId), cancellationToken);
-
-        if(order is null)
+        var saleOrder = await GetByIdAsync(id, cancellationToken);
+        if (saleOrder == null)
             return false;
 
-        order.IsCancelled = true;
+        _context.SaleOrders.Remove(saleOrder);
         await _context.SaveChangesAsync(cancellationToken);
-
-        return true;
-    }
-
-    /// <summary>
-    /// Cancels a specific item within a sale order
-    /// </summary>
-    /// <param name="orderId">The unique identifier of the order</param>
-    /// <param name="itemId">The unique identifier of the item to cancel</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>True if the item was cancelled, false if the order or item was not found</returns>
-    public async Task<bool> CancelOrderItemAsync(Guid orderId, Guid itemId, CancellationToken cancellationToken = default)
-    {
-        var order = await _context.SaleOrders.FirstOrDefaultAsync(x => x.Id.Equals(orderId), cancellationToken);
-
-        if(order is null)
-            return false;
-
-        var item = order.Products.FirstOrDefault(x => x.Id.Equals(itemId));
-
-        if(item is null)
-            return false;
-
-        item.IsCancelled = true;
-        await _context.SaveChangesAsync(cancellationToken);
-
         return true;
     }
 }

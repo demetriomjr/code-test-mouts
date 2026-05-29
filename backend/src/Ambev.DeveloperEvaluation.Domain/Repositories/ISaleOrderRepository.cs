@@ -19,7 +19,7 @@ public interface ISaleOrderRepository
     /// <param name="id">The sale order's id to find</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale order</returns>
-    Task<SaleOrder> GetOrderById(Guid id, CancellationToken cancellationToken = default);
+    Task<SaleOrder?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Creates a new sale order in the repository
@@ -35,6 +35,8 @@ public interface ISaleOrderRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The last persisted order number</returns>
     Task<int> GetLastOrderNumber(CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Set an order to cancelled
