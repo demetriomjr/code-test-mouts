@@ -12,14 +12,14 @@ namespace Ambev.DeveloperEvaluation.Application.SaleOrders.DeleteSaleOrder;
 public class DeleteSaleOrderHandler : IRequestHandler<DeleteSaleOrderCommand, DeleteSaleOrderResponse>
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
-    private readonly ILogger _logger;
+    private readonly ILogger<DeleteSaleOrderHandler> _logger;
 
     /// <summary>
     /// Initializes a new instance of DeleteSaleOrderHandler.
     /// </summary>
     /// <param name="saleOrderRepository">The sale order repository.</param>
     /// <param name="logger">The ILogger instance.</param>
-    public DeleteSaleOrderHandler(ISaleOrderRepository saleOrderRepository, ILogger logger)
+    public DeleteSaleOrderHandler(ISaleOrderRepository saleOrderRepository, ILogger<DeleteSaleOrderHandler> logger)
     {
         _saleOrderRepository = saleOrderRepository;
         _logger = logger;
@@ -47,6 +47,8 @@ public class DeleteSaleOrderHandler : IRequestHandler<DeleteSaleOrderCommand, De
         var success = await _saleOrderRepository.DeleteAsync(request.Id, cancellationToken);
         if (!success)
             throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
+
+        _logger.LogInformation("Sale order {SaleOrderId} deleted successfully", request.Id);
         
         //Uncomment this IF the Delete route actually Cancels the Sale Order
         //var saleCancelledEvent = new SaleCancelledEvent(request.Id, order.OrderNumber);

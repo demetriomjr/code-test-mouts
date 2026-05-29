@@ -24,16 +24,18 @@ public class SaleOrdersController : BaseController
 {
     private readonly IMediator _mediator;
     private readonly IMapper _mapper;
+    private readonly ILogger<SaleOrdersController> _logger;
 
     /// <summary>
     /// Initializes a new instance of SaleOrdersController
     /// </summary>
     /// <param name="mediator">The mediator instance</param>
     /// <param name="mapper">The AutoMapper instance</param>
-    public SaleOrdersController(IMediator mediator, IMapper mapper)
+    public SaleOrdersController(IMediator mediator, IMapper mapper, ILogger<SaleOrdersController> logger)
     {
         _mediator = mediator;
         _mapper = mapper;
+        _logger = logger;
     }
 
     /// <summary>
@@ -51,10 +53,14 @@ public class SaleOrdersController : BaseController
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning("BadRequest on {Method} {Path}: invalid payload for creating sale order", HttpContext.Request.Method, HttpContext.Request.Path);
             return BadRequest(validationResult.Errors);
+        }
 
         var command = _mapper.Map<CreateSaleOrderCommand>(request);
         var response = await _mediator.Send(command, cancellationToken);
+        _logger.LogInformation("Success on {Method} {Path}: sale order created", HttpContext.Request.Method, HttpContext.Request.Path);
 
         return Created(string.Empty, new ApiResponseWithData<CreateSaleOrderResponse>
         {
@@ -79,10 +85,14 @@ public class SaleOrdersController : BaseController
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning("BadRequest on {Method} {Path}: invalid query for listing sale orders", HttpContext.Request.Method, HttpContext.Request.Path);
             return BadRequest(validationResult.Errors);
+        }
 
         var command = _mapper.Map<GetSaleOrdersCommand>(request);
         var response = await _mediator.Send(command, cancellationToken);
+        _logger.LogInformation("Success on {Method} {Path}: sale orders listed", HttpContext.Request.Method, HttpContext.Request.Path);
 
         return Ok(new ApiResponseWithData<GetSaleOrdersResponse>
         {
@@ -109,10 +119,14 @@ public class SaleOrdersController : BaseController
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning("BadRequest on {Method} {Path}: invalid route data for getting sale order", HttpContext.Request.Method, HttpContext.Request.Path);
             return BadRequest(validationResult.Errors);
+        }
 
         var command = _mapper.Map<GetSaleOrderCommand>(request.Id);
         var response = await _mediator.Send(command, cancellationToken);
+        _logger.LogInformation("Success on {Method} {Path}: sale order retrieved", HttpContext.Request.Method, HttpContext.Request.Path);
 
         return Ok(new ApiResponseWithData<GetSaleOrderResponse>
         {
@@ -140,10 +154,14 @@ public class SaleOrdersController : BaseController
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning("BadRequest on {Method} {Path}: invalid payload for updating sale order", HttpContext.Request.Method, HttpContext.Request.Path);
             return BadRequest(validationResult.Errors);
+        }
 
         var command = _mapper.Map<UpdateSaleOrderCommand>(request);
         var response = await _mediator.Send(command, cancellationToken);
+        _logger.LogInformation("Success on {Method} {Path}: sale order updated", HttpContext.Request.Method, HttpContext.Request.Path);
 
         return Ok(new ApiResponseWithData<UpdateSaleOrderResponse>
         {
@@ -170,10 +188,14 @@ public class SaleOrdersController : BaseController
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
+        {
+            _logger.LogWarning("BadRequest on {Method} {Path}: invalid route data for deleting sale order", HttpContext.Request.Method, HttpContext.Request.Path);
             return BadRequest(validationResult.Errors);
+        }
 
         var command = _mapper.Map<DeleteSaleOrderCommand>(request.Id);
         await _mediator.Send(command, cancellationToken);
+        _logger.LogInformation("Success on {Method} {Path}: sale order deleted", HttpContext.Request.Method, HttpContext.Request.Path);
 
         return Ok(new ApiResponse
         {
