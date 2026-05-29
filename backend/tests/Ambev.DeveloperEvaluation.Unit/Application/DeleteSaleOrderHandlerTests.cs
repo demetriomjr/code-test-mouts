@@ -9,12 +9,18 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application;
 
+/// <summary>
+/// Contains unit tests for <see cref="DeleteSaleOrderHandler"/>.
+/// </summary>
 public class DeleteSaleOrderHandlerTests
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
     private readonly ILogger<DeleteSaleOrderHandler> _logger;
     private readonly DeleteSaleOrderHandler _handler;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="DeleteSaleOrderHandlerTests"/>.
+    /// </summary>
     public DeleteSaleOrderHandlerTests()
     {
         _saleOrderRepository = Substitute.For<ISaleOrderRepository>();
@@ -22,6 +28,9 @@ public class DeleteSaleOrderHandlerTests
         _handler = new DeleteSaleOrderHandler(_saleOrderRepository, _logger);
     }
 
+    /// <summary>
+    /// Tests that a valid delete command returns successful response.
+    /// </summary>
     [Fact(DisplayName = "Given valid id When deleting sale order Then returns success response")]
     public async Task Handle_ValidRequest_ReturnsSuccessResponse()
     {
@@ -41,6 +50,9 @@ public class DeleteSaleOrderHandlerTests
         await _saleOrderRepository.Received(1).DeleteAsync(command.Id, Arg.Any<CancellationToken>());
     }
 
+    /// <summary>
+    /// Tests that an invalid delete command throws validation exception.
+    /// </summary>
     [Fact(DisplayName = "Given invalid id When deleting sale order Then throws validation exception")]
     public async Task Handle_InvalidRequest_ThrowsValidationException()
     {
@@ -54,6 +66,9 @@ public class DeleteSaleOrderHandlerTests
         await act.Should().ThrowAsync<FluentValidation.ValidationException>();
     }
 
+    /// <summary>
+    /// Tests that deleting a missing sale order throws key not found exception.
+    /// </summary>
     [Fact(DisplayName = "Given missing sale order When deleting Then throws key not found exception")]
     public async Task Handle_OrderNotFound_ThrowsKeyNotFoundException()
     {

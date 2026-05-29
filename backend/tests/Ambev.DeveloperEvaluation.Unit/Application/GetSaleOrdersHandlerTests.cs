@@ -10,12 +10,18 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application;
 
+/// <summary>
+/// Contains unit tests for <see cref="GetSaleOrdersHandler"/>.
+/// </summary>
 public class GetSaleOrdersHandlerTests
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
     private readonly IMapper _mapper;
     private readonly GetSaleOrdersHandler _handler;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="GetSaleOrdersHandlerTests"/>.
+    /// </summary>
     public GetSaleOrdersHandlerTests()
     {
         _saleOrderRepository = Substitute.For<ISaleOrderRepository>();
@@ -23,6 +29,9 @@ public class GetSaleOrdersHandlerTests
         _handler = new GetSaleOrdersHandler(_saleOrderRepository, _mapper);
     }
 
+    /// <summary>
+    /// Tests that a valid list command returns paginated sale orders.
+    /// </summary>
     [Fact(DisplayName = "Given valid filters When listing sale orders Then returns paginated result")]
     public async Task Handle_ValidRequest_ReturnsPaginatedResult()
     {
@@ -65,6 +74,9 @@ public class GetSaleOrdersHandlerTests
         result.Orders.Should().HaveCount(1);
     }
 
+    /// <summary>
+    /// Tests that an invalid list command throws a validation exception.
+    /// </summary>
     [Fact(DisplayName = "Given invalid command When listing sale orders Then throws validation exception")]
     public async Task Handle_InvalidRequest_ThrowsValidationException()
     {
@@ -78,6 +90,9 @@ public class GetSaleOrdersHandlerTests
         await act.Should().ThrowAsync<FluentValidation.ValidationException>();
     }
 
+    /// <summary>
+    /// Tests that filter values are forwarded to repository query.
+    /// </summary>
     [Fact(DisplayName = "Given command filters When listing sale orders Then forwards filters to repository")]
     public async Task Handle_ValidRequest_ForwardsFiltersToRepository()
     {

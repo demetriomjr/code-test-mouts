@@ -10,6 +10,9 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application;
 
+/// <summary>
+/// Contains unit tests for <see cref="CreateSaleOrderHandler"/>.
+/// </summary>
 public class CreateSaleOrderHandlerTests
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
@@ -17,6 +20,9 @@ public class CreateSaleOrderHandlerTests
     private readonly ILogger<CreateSaleOrderHandler> _logger;
     private readonly CreateSaleOrderHandler _handler;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="CreateSaleOrderHandlerTests"/>.
+    /// </summary>
     public CreateSaleOrderHandlerTests()
     {
         _saleOrderRepository = Substitute.For<ISaleOrderRepository>();
@@ -25,6 +31,9 @@ public class CreateSaleOrderHandlerTests
         _handler = new CreateSaleOrderHandler(_saleOrderRepository, _mapper, _logger);
     }
 
+    /// <summary>
+    /// Tests that a valid create command returns a successful result.
+    /// </summary>
     [Fact(DisplayName = "Given valid sale order data When creating sale order Then returns success response")]
     public async Task Handle_ValidRequest_ReturnsSuccessResponse()
     {
@@ -43,6 +52,9 @@ public class CreateSaleOrderHandlerTests
         await _saleOrderRepository.Received(1).CreateAsync(Arg.Any<SaleOrder>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>
+    /// Tests that an invalid create command throws a validation exception.
+    /// </summary>
     [Fact(DisplayName = "Given invalid sale order data When creating sale order Then throws validation exception")]
     public async Task Handle_InvalidRequest_ThrowsValidationException()
     {
@@ -56,6 +68,9 @@ public class CreateSaleOrderHandlerTests
         await act.Should().ThrowAsync<FluentValidation.ValidationException>();
     }
 
+    /// <summary>
+    /// Tests that discount and total values are applied before persistence.
+    /// </summary>
     [Fact(DisplayName = "Given valid command When handling Then applies discount and total before persisting")]
     public async Task Handle_ValidRequest_AppliesDiscountAndTotalBeforeSaving()
     {
@@ -96,6 +111,12 @@ public class CreateSaleOrderHandlerTests
             Arg.Any<CancellationToken>());
     }
 
+    /// <summary>
+    /// Builds a sale order entity from a create command.
+    /// </summary>
+    /// <param name="command">The source command.</param>
+    /// <param name="orderNumber">The order number to assign.</param>
+    /// <returns>A mapped <see cref="SaleOrder"/> entity.</returns>
     private static SaleOrder BuildOrderFromCommand(CreateSaleOrderCommand command, int orderNumber)
     {
         return new SaleOrder
@@ -114,6 +135,12 @@ public class CreateSaleOrderHandlerTests
         };
     }
 
+    /// <summary>
+    /// Sets up mapper and repository mocks for a valid create flow.
+    /// </summary>
+    /// <param name="command">The create command.</param>
+    /// <param name="order">The mapped order entity.</param>
+    /// <param name="result">The expected handler result.</param>
     private void SetupValidFlow(CreateSaleOrderCommand command, SaleOrder order, CreateSaleOrderResult result)
     {
         _mapper.Map<SaleOrder>(command).Returns(order);

@@ -10,12 +10,18 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application;
 
+/// <summary>
+/// Contains unit tests for <see cref="GetSaleOrderHandler"/>.
+/// </summary>
 public class GetSaleOrderHandlerTests
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
     private readonly IMapper _mapper;
     private readonly GetSaleOrderHandler _handler;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="GetSaleOrderHandlerTests"/>.
+    /// </summary>
     public GetSaleOrderHandlerTests()
     {
         _saleOrderRepository = Substitute.For<ISaleOrderRepository>();
@@ -23,6 +29,9 @@ public class GetSaleOrderHandlerTests
         _handler = new GetSaleOrderHandler(_saleOrderRepository, _mapper);
     }
 
+    /// <summary>
+    /// Tests that a valid id returns a mapped sale order result.
+    /// </summary>
     [Fact(DisplayName = "Given valid id When getting sale order Then returns mapped result")]
     public async Task Handle_ValidRequest_ReturnsMappedResult()
     {
@@ -55,6 +64,9 @@ public class GetSaleOrderHandlerTests
         result.OrderNumber.Should().Be(order.OrderNumber);
     }
 
+    /// <summary>
+    /// Tests that an invalid id throws a validation exception.
+    /// </summary>
     [Fact(DisplayName = "Given invalid id When getting sale order Then throws validation exception")]
     public async Task Handle_InvalidRequest_ThrowsValidationException()
     {
@@ -68,6 +80,9 @@ public class GetSaleOrderHandlerTests
         await act.Should().ThrowAsync<FluentValidation.ValidationException>();
     }
 
+    /// <summary>
+    /// Tests that missing sale order data throws key not found exception.
+    /// </summary>
     [Fact(DisplayName = "Given missing sale order When getting by id Then throws key not found exception")]
     public async Task Handle_OrderNotFound_ThrowsKeyNotFoundException()
     {

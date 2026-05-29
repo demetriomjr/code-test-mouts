@@ -4,6 +4,9 @@ using Bogus.Extensions;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.TestData;
 
+/// <summary>
+/// Provides test data builders for <see cref="CreateSaleOrderCommand"/>.
+/// </summary>
 public static class CreateSaleOrderHandlerTestData
 {
     private static readonly Faker<CreateSaleOrderItemCommand> CreateSaleOrderItemFaker = new Faker<CreateSaleOrderItemCommand>()
@@ -24,6 +27,10 @@ public static class CreateSaleOrderHandlerTestData
         .RuleFor(x => x.Products, 
             f => CreateSaleOrderItemFaker.Generate(f.Random.Int(1, 5)));
 
+    /// <summary>
+    /// Generates a valid create sale order command.
+    /// </summary>
+    /// <returns>A valid <see cref="CreateSaleOrderCommand"/>.</returns>
     public static CreateSaleOrderCommand GenerateValidCommand()
     {
         return CreateSaleOrderCommandFaker.Generate();

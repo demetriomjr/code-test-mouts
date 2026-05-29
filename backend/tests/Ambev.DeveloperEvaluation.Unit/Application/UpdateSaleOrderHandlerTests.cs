@@ -11,6 +11,9 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application;
 
+/// <summary>
+/// Contains unit tests for <see cref="UpdateSaleOrderHandler"/>.
+/// </summary>
 public class UpdateSaleOrderHandlerTests
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
@@ -18,6 +21,9 @@ public class UpdateSaleOrderHandlerTests
     private readonly ILogger<UpdateSaleOrderHandler> _logger;
     private readonly UpdateSaleOrderHandler _handler;
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="UpdateSaleOrderHandlerTests"/>.
+    /// </summary>
     public UpdateSaleOrderHandlerTests()
     {
         _saleOrderRepository = Substitute.For<ISaleOrderRepository>();
@@ -26,6 +32,9 @@ public class UpdateSaleOrderHandlerTests
         _handler = new UpdateSaleOrderHandler(_saleOrderRepository, _mapper, _logger);
     }
 
+    /// <summary>
+    /// Tests that a valid update command returns successful response.
+    /// </summary>
     [Fact(DisplayName = "Given valid sale order data When updating sale order Then returns success response")]
     public async Task Handle_ValidRequest_ReturnsSuccessResponse()
     {
@@ -49,6 +58,9 @@ public class UpdateSaleOrderHandlerTests
         await _saleOrderRepository.Received(1).UpdateAsync(Arg.Any<SaleOrder>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>
+    /// Tests that an invalid update command throws validation exception.
+    /// </summary>
     [Fact(DisplayName = "Given invalid sale order data When updating sale order Then throws validation exception")]
     public async Task Handle_InvalidRequest_ThrowsValidationException()
     {
@@ -62,6 +74,9 @@ public class UpdateSaleOrderHandlerTests
         await act.Should().ThrowAsync<FluentValidation.ValidationException>();
     }
 
+    /// <summary>
+    /// Tests that updating a missing sale order throws key not found exception.
+    /// </summary>
     [Fact(DisplayName = "Given missing sale order When updating Then throws key not found exception")]
     public async Task Handle_OrderNotFound_ThrowsKeyNotFoundException()
     {
@@ -76,6 +91,11 @@ public class UpdateSaleOrderHandlerTests
         await act.Should().ThrowAsync<KeyNotFoundException>();
     }
 
+    /// <summary>
+    /// Builds an existing order entity used in update tests.
+    /// </summary>
+    /// <param name="id">The order identifier.</param>
+    /// <returns>A sale order instance.</returns>
     private static SaleOrder BuildExistingOrder(Guid id)
     {
         return new SaleOrder
@@ -101,6 +121,12 @@ public class UpdateSaleOrderHandlerTests
         };
     }
 
+    /// <summary>
+    /// Maps update item commands to sale order item entities.
+    /// </summary>
+    /// <param name="products">Update item commands.</param>
+    /// <param name="saleOrderId">Owning sale order identifier.</param>
+    /// <returns>A list of <see cref="SaleOrderItem"/> entities.</returns>
     private static List<SaleOrderItem> BuildMappedItems(IEnumerable<UpdateSaleOrderItemCommand> products, Guid saleOrderId)
     {
         return products.Select(x => new SaleOrderItem

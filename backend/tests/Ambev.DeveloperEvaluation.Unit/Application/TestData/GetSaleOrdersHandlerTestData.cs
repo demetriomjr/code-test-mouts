@@ -4,6 +4,9 @@ using Bogus;
 
 namespace Ambev.DeveloperEvaluation.Unit.Application.TestData;
 
+/// <summary>
+/// Provides test data builders for <see cref="GetSaleOrdersCommand"/>.
+/// </summary>
 public static class GetSaleOrdersHandlerTestData
 {
     private static readonly string[] OrderByOptions =
@@ -44,6 +47,10 @@ public static class GetSaleOrdersHandlerTestData
         .RuleFor(x => x.OrderBy, 
             f => f.PickRandom(OrderByOptions));
 
+    /// <summary>
+    /// Generates a valid get sale orders command.
+    /// </summary>
+    /// <returns>A valid <see cref="GetSaleOrdersCommand"/>.</returns>
     public static GetSaleOrdersCommand GenerateValidCommand()
     {
         return GetSaleOrdersCommandFaker.Generate();
