@@ -11,47 +11,45 @@ namespace Ambev.DeveloperEvaluation.Application.SaleOrders.DeleteSaleOrder;
 /// </summary>
 public class DeleteSaleOrderHandler : IRequestHandler<DeleteSaleOrderCommand, DeleteSaleOrderResponse>
 {
-    private readonly ISaleOrderRepository _saleOrderRepository;
+    private readonly ISaleOrderRepository _orderRepository;
     private readonly ILogger<DeleteSaleOrderHandler> _logger;
 
     /// <summary>
     /// Initializes a new instance of DeleteSaleOrderHandler.
     /// </summary>
-    /// <param name="saleOrderRepository">The sale order repository.</param>
+    /// <param name="orderRepository">The sale order repository.</param>
     /// <param name="logger">The ILogger instance.</param>
-    public DeleteSaleOrderHandler(ISaleOrderRepository saleOrderRepository, ILogger<DeleteSaleOrderHandler> logger)
+    public DeleteSaleOrderHandler(ISaleOrderRepository orderRepository, ILogger<DeleteSaleOrderHandler> logger)
     {
-        _saleOrderRepository = saleOrderRepository;
+        _orderRepository = orderRepository;
         _logger = logger;
     }
 
     /// <summary>
     /// Handles the DeleteSaleOrderCommand request.
     /// </summary>
-    /// <param name="request">The DeleteSaleOrder command.</param>
+    /// <param name="command">The DeleteSaleOrder command.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The result of the delete operation.</returns>
-    public async Task<DeleteSaleOrderResponse> Handle(DeleteSaleOrderCommand request, CancellationToken cancellationToken)
+    public async Task<DeleteSaleOrderResponse> Handle(DeleteSaleOrderCommand command, CancellationToken cancellationToken)
     {
         var validator = new DeleteSaleOrderValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
-        
-        var order = await _saleOrderRepository.GetByIdAsync(request.Id, cancellationToken);
-        
-        if(order is null)
-            throw new KeyNotFoundException($"Order not found for ID {request.Id}");
 
-        var success = await _saleOrderRepository.DeleteAsync(request.Id, cancellationToken);
+        var success = await _orderRepository.DeleteAsync(command.Id, cancellationToken);
         if (!success)
-            throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
+            throw new KeyNotFoundException($"Sale order with ID {command.Id} not found");
 
-        _logger.LogInformation("Sale order {SaleOrderId} deleted successfully", request.Id);
+        _logger.LogInformation("Sale order {SaleOrderId} deleted successfully", command.Id);
         
         //Uncomment this IF the Delete route actually Cancels the Sale Order
-        //var saleCancelledEvent = new SaleCancelledEvent(request.Id, order.OrderNumber);
+        //var order = await _orderRepository.GetByIdAsync(command.Id, cancellationToken);
+        //if(order is null)
+        //    throw new KeyNotFoundException($"Sale order with ID {command.Id} not found");
+        //var saleCancelledEvent = new SaleCancelledEvent(command.Id, order.OrderNumber);
         //_logger.LogInformation("DomainEvent {EventType} {@Event}", nameof(SaleCancelledEvent), saleCancelledEvent);
 
         return new DeleteSaleOrderResponse { Success = true };

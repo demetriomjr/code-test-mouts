@@ -31,21 +31,21 @@ public class GetSaleOrderHandler : IRequestHandler<GetSaleOrderCommand, GetSaleO
     /// <summary>
     /// Handles the GetSaleOrderCommand request.
     /// </summary>
-    /// <param name="request">The GetSaleOrder command.</param>
+    /// <param name="command">The GetSaleOrder command.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The sale order details if found.</returns>
-    public async Task<GetSaleOrderResultCommon> Handle(GetSaleOrderCommand request, CancellationToken cancellationToken)
+    public async Task<GetSaleOrderResultCommon> Handle(GetSaleOrderCommand command, CancellationToken cancellationToken)
     {
         var validator = new GetSaleOrderValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var order = await _orderRepository.GetByIdAsync(request.Id, cancellationToken);
+        var order = await _orderRepository.GetByIdAsync(command.Id, cancellationToken);
         
         if (order == null)
-            throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
+            throw new KeyNotFoundException($"Sale order with ID {command.Id} not found");
 
         return _mapper.Map<GetSaleOrderResultCommon>(order);
     }

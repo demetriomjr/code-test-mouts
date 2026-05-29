@@ -14,19 +14,19 @@ namespace Ambev.DeveloperEvaluation.Application.SaleOrders.UpdateSaleOrder;
 /// </summary>
 public class UpdateSaleOrderHandler : IRequestHandler<UpdateSaleOrderCommand, UpdateSaleOrderResult>
 {
-    private readonly ISaleOrderRepository _saleOrderRepository;
+    private readonly ISaleOrderRepository _orderRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<UpdateSaleOrderHandler> _logger;
 
     /// <summary>
     /// Initializes a new instance of UpdateSaleOrderHandler.
     /// </summary>
-    /// <param name="saleOrderRepository">The sale order repository.</param>
+    /// <param name="orderRepository">The sale order repository.</param>
     /// <param name="mapper">The AutoMapper instance.</param>
     /// <param name="logger">The ILogger instance.</param>
-    public UpdateSaleOrderHandler(ISaleOrderRepository saleOrderRepository, IMapper mapper, ILogger<UpdateSaleOrderHandler> logger)
+    public UpdateSaleOrderHandler(ISaleOrderRepository orderRepository, IMapper mapper, ILogger<UpdateSaleOrderHandler> logger)
     {
-        _saleOrderRepository = saleOrderRepository;
+        _orderRepository = orderRepository;
         _mapper = mapper;
         _logger = logger;
     }
@@ -34,33 +34,33 @@ public class UpdateSaleOrderHandler : IRequestHandler<UpdateSaleOrderCommand, Up
     /// <summary>
     /// Handles the UpdateSaleOrderCommand request.
     /// </summary>
-    /// <param name="request">The UpdateSaleOrder command.</param>
+    /// <param name="command">The UpdateSaleOrder command.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <returns>The updated sale order details.</returns>
-    public async Task<UpdateSaleOrderResult> Handle(UpdateSaleOrderCommand request, CancellationToken cancellationToken)
+    public async Task<UpdateSaleOrderResult> Handle(UpdateSaleOrderCommand command, CancellationToken cancellationToken)
     {
         var validator = new UpdateSaleOrderValidator();
-        var validationResult = await validator.ValidateAsync(request, cancellationToken);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
 
-        var existingOrder = await _saleOrderRepository.GetByIdAsync(request.Id, cancellationToken);
+        var existingOrder = await _orderRepository.GetByIdAsync(command.Id, cancellationToken);
         if (existingOrder == null)
-            throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
+            throw new KeyNotFoundException($"Sale order with ID {command.Id} not found");
 
-        existingOrder.CustomerName = request.CustomerName;
-        existingOrder.BranchName = request.BranchName;
-        existingOrder.CancelStatus = request.CancelStatus;
+        existingOrder.CustomerName = command.CustomerName;
+        existingOrder.BranchName = command.BranchName;
+        existingOrder.CancelStatus = command.CancelStatus;
 
-        var products = _mapper.Map<List<SaleOrderItem>>(request.Products);
+        var products = _mapper.Map<List<SaleOrderItem>>(command.Products);
         foreach (var item in products)
             item.SaleOrderId = existingOrder.Id;
 
         existingOrder.Products = products;
         existingOrder.ApplyDiscountAndCalcTotal();
 
-        var updatedOrder = await _saleOrderRepository.UpdateAsync(existingOrder, cancellationToken);
+        var updatedOrder = await _orderRepository.UpdateAsync(existingOrder, cancellationToken);
 
         var saleModifiedEvent = new SaleModifiedEvent(updatedOrder.Id, updatedOrder.OrderNumber);
         _logger.LogInformation("DomainEvent {EventType} {@Event}", nameof(SaleModifiedEvent), saleModifiedEvent);
