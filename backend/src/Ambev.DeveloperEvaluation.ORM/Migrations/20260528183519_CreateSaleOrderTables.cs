@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,6 +11,15 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"
+                CREATE SEQUENCE IF NOT EXISTS sale_order_number_seq
+                START WITH 1
+                INCREMENT BY 1
+                NO MINVALUE
+                NO MAXVALUE
+                CACHE 1;
+            ");
+
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
                 table: "Users",
@@ -30,7 +39,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    OrderNumber = table.Column<int>(type: "integer", nullable: false),
+                    OrderNumber = table.Column<int>(type: "integer", nullable: false, defaultValueSql: "nextval('sale_order_number_seq')"),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CustomerName = table.Column<string>(type: "text", nullable: false),
                     BranchName = table.Column<string>(type: "text", nullable: false),
@@ -51,7 +60,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
                     CancelStatus = table.Column<int>(type: "integer", nullable: false),
-                    Ean_Gtin = table.Column<string>(type: "text", nullable: false),
+                    EanGtin = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Amount = table.Column<int>(type: "integer", nullable: false),
@@ -75,6 +84,12 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 name: "IX_SaleOrderItem_SaleOrderId",
                 table: "SaleOrderItem",
                 column: "SaleOrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleOrders_OrderNumber_Unique",
+                table: "SaleOrders",
+                column: "OrderNumber",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -85,6 +100,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
 
             migrationBuilder.DropTable(
                 name: "SaleOrders");
+
+            migrationBuilder.Sql("DROP SEQUENCE IF EXISTS sale_order_number_seq;");
 
             migrationBuilder.DropColumn(
                 name: "CreatedAt",

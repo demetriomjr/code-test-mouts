@@ -6,17 +6,31 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.UpdateSaleOrder;
 
+/// <summary>
+/// Handler for processing UpdateSaleOrderCommand requests.
+/// </summary>
 public class UpdateSaleOrderHandler : IRequestHandler<UpdateSaleOrderCommand, UpdateSaleOrderResult>
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Initializes a new instance of UpdateSaleOrderHandler.
+    /// </summary>
+    /// <param name="saleOrderRepository">The sale order repository.</param>
+    /// <param name="mapper">The AutoMapper instance.</param>
     public UpdateSaleOrderHandler(ISaleOrderRepository saleOrderRepository, IMapper mapper)
     {
         _saleOrderRepository = saleOrderRepository;
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Handles the UpdateSaleOrderCommand request.
+    /// </summary>
+    /// <param name="request">The UpdateSaleOrder command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The updated sale order details.</returns>
     public async Task<UpdateSaleOrderResult> Handle(UpdateSaleOrderCommand request, CancellationToken cancellationToken)
     {
         var validator = new UpdateSaleOrderValidator();

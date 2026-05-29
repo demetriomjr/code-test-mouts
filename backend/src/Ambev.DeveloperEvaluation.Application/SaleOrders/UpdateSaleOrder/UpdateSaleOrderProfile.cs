@@ -3,8 +3,14 @@ using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.UpdateSaleOrder;
 
+/// <summary>
+/// Profile for mapping between SaleOrder entity and UpdateSaleOrder models.
+/// </summary>
 public class UpdateSaleOrderProfile : Profile
 {
+    /// <summary>
+    /// Initializes the mappings for UpdateSaleOrder operation.
+    /// </summary>
     public UpdateSaleOrderProfile()
     {
         CreateMap<UpdateSaleOrderCommand, SaleOrder>()

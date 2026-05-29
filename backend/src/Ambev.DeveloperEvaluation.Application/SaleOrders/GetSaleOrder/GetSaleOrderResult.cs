@@ -1,1 +1,10 @@
-//Placeholder file for result format, since we are sharing the result format in a Common object in both GET routes
+namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrder;
+
+/// <summary>
+/// Placeholder type to keep feature folder structure consistent.
+/// The GetSaleOrder operation returns the shared
+/// Ambev.DeveloperEvaluation.Application.SaleOrders.Common.GetSaleOrderResultCommon type.
+/// </summary>
+public static class GetSaleOrderResult
+{
+}

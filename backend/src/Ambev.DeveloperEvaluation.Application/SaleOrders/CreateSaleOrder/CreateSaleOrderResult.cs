@@ -76,7 +76,7 @@ public class SaleOrderItemResult
     /// <summary>
     /// Gets or sets the GTIN/EAN code of the product.
     /// </summary>
-    public string Ean_Gtin { get; set;}
+    public string EanGtin { get; set;}
 
     /// <summary>
     /// Gets or sets the product description.

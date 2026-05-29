@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Ambev.DeveloperEvaluation.Application.SaleOrders.Common;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
@@ -8,12 +7,20 @@ using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrder;
 
-public class GetOrderHandler : IRequestHandler<GetSaleOrderCommand, GetSaleOrderResultCommon>
+/// <summary>
+/// Handler for processing GetSaleOrderCommand requests.
+/// </summary>
+public class GetSaleOrderHandler : IRequestHandler<GetSaleOrderCommand, GetSaleOrderResultCommon>
 {
     private readonly ISaleOrderRepository _orderRepository;
     private readonly IMapper _mapper;
 
-    public GetOrderHandler(
+    /// <summary>
+    /// Initializes a new instance of GetSaleOrderHandler.
+    /// </summary>
+    /// <param name="orderRepository">The sale order repository.</param>
+    /// <param name="mapper">The AutoMapper instance.</param>
+    public GetSaleOrderHandler(
         ISaleOrderRepository orderRepository,
         IMapper mapper)
     {
@@ -21,6 +28,12 @@ public class GetOrderHandler : IRequestHandler<GetSaleOrderCommand, GetSaleOrder
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Handles the GetSaleOrderCommand request.
+    /// </summary>
+    /// <param name="request">The GetSaleOrder command.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>The sale order details if found.</returns>
     public async Task<GetSaleOrderResultCommon> Handle(GetSaleOrderCommand request, CancellationToken cancellationToken)
     {
         var validator = new GetSaleOrderValidator();

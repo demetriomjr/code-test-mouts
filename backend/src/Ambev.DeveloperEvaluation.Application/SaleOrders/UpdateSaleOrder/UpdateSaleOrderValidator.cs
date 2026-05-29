@@ -3,8 +3,14 @@ using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.UpdateSaleOrder;
 
+/// <summary>
+/// Validator for UpdateSaleOrderCommand that defines validation rules for sale order update.
+/// </summary>
 public class UpdateSaleOrderValidator : AbstractValidator<UpdateSaleOrderCommand>
 {
+    /// <summary>
+    /// Initializes a new instance of the UpdateSaleOrderValidator with defined validation rules.
+    /// </summary>
     public UpdateSaleOrderValidator()
     {
         RuleFor(order => order.Id)
@@ -28,9 +34,9 @@ public class UpdateSaleOrderValidator : AbstractValidator<UpdateSaleOrderCommand
         RuleForEach(order => order.Products)
             .ChildRules(item =>
             {
-                item.RuleFor(x => x.Ean_Gtin)
+                item.RuleFor(x => x.EanGtin)
                     .Must(SaleOrderItemValidator.BeValidGtinOrEan)
-                    .When(x => !string.IsNullOrWhiteSpace(x.Ean_Gtin))
+                    .When(x => !string.IsNullOrWhiteSpace(x.EanGtin))
                     .WithMessage("Invalid GTIN/EAN value");
 
                 item.RuleFor(x => x.Price)

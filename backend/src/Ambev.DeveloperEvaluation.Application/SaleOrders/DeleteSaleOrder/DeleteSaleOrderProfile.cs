@@ -1,0 +1,1 @@
+﻿//This is a placeholder file since the response for Delete route is a simple boolean

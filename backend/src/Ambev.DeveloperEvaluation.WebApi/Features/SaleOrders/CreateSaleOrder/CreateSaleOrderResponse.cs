@@ -76,7 +76,7 @@ public class SaleOrderItemResponse
     /// <summary>
     /// The GTIN/EAN code of the product
     /// </summary>
-    public string Ean_Gtin { get; set; } = string.Empty;
+    public string EanGtin { get; set; } = string.Empty;
 
     /// <summary>
     /// The description of the product

@@ -18,7 +18,7 @@ public class CreateSaleOrderValidator : AbstractValidator<CreateSaleOrderCommand
     /// - BranchName: Required, length between 3 and 50 characters
     /// - Products: Must contain at least one item
     /// - Each product item:
-    ///   - Ean_Gtin: Must be a valid GTIN/EAN format when provided
+    ///   - EanGtin: Must be a valid GTIN/EAN format when provided
     ///   - Price: Must be greater than zero and have up to 2 decimal places
     ///   - Description: Length between 3 and 50 characters
     ///   - Amount: Must be greater than zero and less than 20
@@ -41,9 +41,9 @@ public class CreateSaleOrderValidator : AbstractValidator<CreateSaleOrderCommand
         
         RuleForEach(order => order.Products)
             .ChildRules(item => {
-                item.RuleFor(item => item.Ean_Gtin)
+                item.RuleFor(item => item.EanGtin)
                     .Must(SaleOrderItemValidator.BeValidGtinOrEan)
-                    .When(item => !string.IsNullOrWhiteSpace(item.Ean_Gtin))
+                    .When(item => !string.IsNullOrWhiteSpace(item.EanGtin))
                     .WithMessage("Invalid GTIN/EAN value");
 
                 item.RuleFor(item => item.Price)

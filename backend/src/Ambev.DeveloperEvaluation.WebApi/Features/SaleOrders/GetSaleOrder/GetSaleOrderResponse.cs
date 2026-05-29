@@ -1,101 +1,105 @@
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.Application.SaleOrders.UpdateSaleOrder;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.SaleOrders.GetSaleOrder;
 
 /// <summary>
-/// Represents the result returned after successfully updating a sale order.
+/// API response model for GetSaleOrder operation.
 /// </summary>
-public class UpdateSaleOrderResult
+public class GetSaleOrderResponse
 {
     /// <summary>
     /// The unique identifier of the sale order.
     /// </summary>
     public Guid Id { get; set; }
+
     /// <summary>
     /// The auto-generated order number.
     /// </summary>
     public int OrderNumber { get; set; }
+
     /// <summary>
     /// The date when the sale order was created.
     /// </summary>
     public DateTime Date { get; set; }
+
     /// <summary>
-    /// The customer name associated with the order.
+    /// The customer's name for the sale order.
     /// </summary>
     public string CustomerName { get; set; } = string.Empty;
+
     /// <summary>
-    /// The branch name where the sale was made.
+    /// The branch name where the sale occurred.
     /// </summary>
     public string BranchName { get; set; } = string.Empty;
+
     /// <summary>
     /// The total sale amount after discounts.
     /// </summary>
     public decimal TotalSale { get; set; }
+
     /// <summary>
-    /// The list of items that compose the sale order.
+    /// The list of products in the sale order.
     /// </summary>
-    public IEnumerable<UpdateSaleOrderItemResult> Products { get; set; } = [];
+    public IEnumerable<GetSaleOrderItemResponse> Products { get; set; } = [];
+
     /// <summary>
-    /// The cancellation status of the sale order.
+    /// Indicates the cancellation status of the sale order.
     /// </summary>
     public CancelStatus CancelStatus { get; set; }
+
     /// <summary>
-    /// The date and time when the order was created in persistence.
+    /// The date and time when the sale order was created.
     /// </summary>
     public DateTime CreatedAt { get; set; }
+
     /// <summary>
-    /// The date and time when the order was last updated in persistence.
+    /// The date and time when the sale order was last updated.
     /// </summary>
     public DateTime UpdatedAt { get; set; }
 }
 
 /// <summary>
-/// Represents a sale order item in the update sale order result.
+/// Represents a product item within a sale order response.
 /// </summary>
-public class UpdateSaleOrderItemResult
+public class GetSaleOrderItemResponse
 {
     /// <summary>
     /// The unique identifier of the sale order item.
     /// </summary>
     public Guid Id { get; set; }
+
     /// <summary>
-    /// The unique identifier of the sale order that owns this item.
-    /// </summary>
-    public Guid SaleOrderId { get; set; }
-    /// <summary>
-    /// The cancellation status of this item.
+    /// Indicates the cancellation status of the item.
     /// </summary>
     public CancelStatus CancelStatus { get; set; }
+
     /// <summary>
     /// The GTIN/EAN code of the product.
     /// </summary>
     public string EanGtin { get; set; } = string.Empty;
+
     /// <summary>
-    /// The product description.
+    /// The description of the product.
     /// </summary>
     public string Description { get; set; } = string.Empty;
+
     /// <summary>
-    /// The product unit price.
+    /// The unit price of the product.
     /// </summary>
     public decimal Price { get; set; }
+
     /// <summary>
-    /// The ordered quantity for this item.
+    /// The quantity of the product ordered.
     /// </summary>
     public int Amount { get; set; }
+
     /// <summary>
     /// The discount percentage applied to this item.
     /// </summary>
     public int Discount { get; set; }
+
     /// <summary>
     /// The total value for this item after discount.
     /// </summary>
     public decimal TotalValue { get; set; }
-    /// <summary>
-    /// The date and time when this item was created in persistence.
-    /// </summary>
-    public DateTime CreatedAt { get; set; }
-    /// <summary>
-    /// The date and time when this item was last updated in persistence.
-    /// </summary>
-    public DateTime UpdatedAt { get; set; }
 }

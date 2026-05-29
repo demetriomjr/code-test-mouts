@@ -12,9 +12,9 @@ public class SaleOrderItemValidator : AbstractValidator<SaleOrderItem>
             .NotEmpty()
             .WithMessage("A valida GUID Sale Order ID must Be provided");
 
-        RuleFor(item => item.Ean_Gtin)
+        RuleFor(item => item.EanGtin)
             .Must(BeValidGtinOrEan)
-            .When(item => !string.IsNullOrWhiteSpace(item.Ean_Gtin))
+            .When(item => !string.IsNullOrWhiteSpace(item.EanGtin))
             .WithMessage("Invalid GTIN/EAN value");
 
         RuleFor(item => item.Price)

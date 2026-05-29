@@ -51,6 +51,16 @@ public class DefaultContext : DbContext
             .HasMany(order => order.Products)
             .WithOne()
             .HasForeignKey(item => item.SaleOrderId);
+
+        modelBuilder.Entity<SaleOrder>()
+            .HasIndex(order => order.OrderNumber)
+            .IsUnique();
+        
+        //Postgres sequence generator to avoid conflict due to race condition
+        modelBuilder.Entity<SaleOrder>()
+            .Property(order => order.OrderNumber)
+            .HasDefaultValueSql("nextval('sale_order_number_seq')")
+            .ValueGeneratedOnAdd();
     }
 }
 public class YourDbContextFactory : IDesignTimeDbContextFactory<DefaultContext>
