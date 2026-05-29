@@ -178,7 +178,10 @@ public class SaleOrdersController : BaseController
         return Ok(new ApiResponse
         {
             Success = true,
+            //This version will return deleted message IF deleting record from database is the desired behaviour
             Message = "Sale order deleted successfully"
+            //This version will return cancelled message IF cancelling sale order is the desired behaviour
+            //Message = "Sale order cancelled successfully"
         });
     }
 }

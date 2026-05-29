@@ -151,14 +151,14 @@ public class SaleOrderRepository : ISaleOrderRepository
     /// <param name="order">The sale order to create</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale order</returns>
-    public async Task<SaleOrder> CreateAsync(SaleOrder order, CancellationToken cancellationToken = default)
+    public async Task<SaleOrder> CreateAsync(order order, CancellationToken cancellationToken = default)
     {
         var result = await _context.SaleOrders.AddAsync(order, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
         return result.Entity;
     }
 
-    public async Task<SaleOrder> UpdateAsync(SaleOrder order, CancellationToken cancellationToken = default)
+    public async Task<SaleOrder> UpdateAsync(order order, CancellationToken cancellationToken = default)
     {
         _context.SaleOrders.Update(order);
         await _context.SaveChangesAsync(cancellationToken);
@@ -184,11 +184,16 @@ public class SaleOrderRepository : ISaleOrderRepository
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var saleOrder = await GetByIdAsync(id, cancellationToken);
-        if (saleOrder == null)
+        var order = await GetByIdAsync(id, cancellationToken);
+        if (order == null)
             return false;
-
-        _context.SaleOrders.Remove(saleOrder);
+        
+        //This version will ONLY cancel the order if the desired behaviour is so
+        //order.CancelStatus = CancelStatus.Cancelled;
+        
+        //This version will delete the record from database IF it's the desired behaviour
+        _context.SaleOrders.Remove(order);
+        
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }

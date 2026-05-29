@@ -23,6 +23,7 @@ public class UpdateSaleOrderHandler : IRequestHandler<UpdateSaleOrderCommand, Up
     /// </summary>
     /// <param name="saleOrderRepository">The sale order repository.</param>
     /// <param name="mapper">The AutoMapper instance.</param>
+    /// <param name="logger">The ILogger instance.</param>
     public UpdateSaleOrderHandler(ISaleOrderRepository saleOrderRepository, IMapper mapper, ILogger<UpdateSaleOrderHandler> logger)
     {
         _saleOrderRepository = saleOrderRepository;

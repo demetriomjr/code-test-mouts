@@ -1,6 +1,8 @@
+using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.DeleteSaleOrder;
 
@@ -10,14 +12,17 @@ namespace Ambev.DeveloperEvaluation.Application.SaleOrders.DeleteSaleOrder;
 public class DeleteSaleOrderHandler : IRequestHandler<DeleteSaleOrderCommand, DeleteSaleOrderResponse>
 {
     private readonly ISaleOrderRepository _saleOrderRepository;
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Initializes a new instance of DeleteSaleOrderHandler.
     /// </summary>
     /// <param name="saleOrderRepository">The sale order repository.</param>
-    public DeleteSaleOrderHandler(ISaleOrderRepository saleOrderRepository)
+    /// <param name="logger">The ILogger instance.</param>
+    public DeleteSaleOrderHandler(ISaleOrderRepository saleOrderRepository, ILogger logger)
     {
         _saleOrderRepository = saleOrderRepository;
+        _logger = logger;
     }
 
     /// <summary>
@@ -33,10 +38,19 @@ public class DeleteSaleOrderHandler : IRequestHandler<DeleteSaleOrderCommand, De
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
+        
+        var order = await _saleOrderRepository.GetByIdAsync(request.Id, cancellationToken);
+        
+        if(order is null)
+            throw new KeyNotFoundException($"Order not found for ID {request.Id}");
 
         var success = await _saleOrderRepository.DeleteAsync(request.Id, cancellationToken);
         if (!success)
             throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
+        
+        //Uncomment this IF the Delete route actually Cancels the Sale Order
+        //var saleCancelledEvent = new SaleCancelledEvent(request.Id, order.OrderNumber);
+        //_logger.LogInformation("DomainEvent {EventType} {@Event}", nameof(SaleCancelledEvent), saleCancelledEvent);
 
         return new DeleteSaleOrderResponse { Success = true };
     }
