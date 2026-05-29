@@ -40,6 +40,7 @@ public class CreateSaleOrderHandler : IRequestHandler<CreateSaleOrderCommand, Cr
         // order.OrderNumber = nextOrderNumber;
         order.ApplyDiscountAndCalcTotal();
         var createdOrder = await _orderRepository.CreateAsync(order, cancellationToken);
+        
         var result = _mapper.Map<CreateSaleOrderResult>(createdOrder);
         return result;
     }

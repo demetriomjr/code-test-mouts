@@ -43,6 +43,7 @@ public class GetSaleOrderHandler : IRequestHandler<GetSaleOrderCommand, GetSaleO
             throw new ValidationException(validationResult.Errors);
 
         var order = await _orderRepository.GetByIdAsync(request.Id, cancellationToken);
+        
         if (order == null)
             throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
 
