@@ -4,8 +4,15 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation;
 
+/// <summary>
+/// Contains unit tests for EAN/GTIN validation logic in <see cref="SaleOrderItemValidator"/>.
+/// </summary>
 public class SaleOrderItemEanGtinValidationTests
 {
+    /// <summary>
+    /// Tests that valid EAN/GTIN values are accepted by the validator.
+    /// </summary>
+    /// <param name="eanGtin">The valid EAN/GTIN value.</param>
     [Theory(DisplayName = "Valid EanGtin values should pass validation")]
     [InlineData("96385074")] // EAN-8
     [InlineData("012345678905")] // UPC-A (12)
@@ -20,6 +27,10 @@ public class SaleOrderItemEanGtinValidationTests
         result.Should().BeTrue();
     }
 
+    /// <summary>
+    /// Tests that invalid EAN/GTIN values are rejected by the validator.
+    /// </summary>
+    /// <param name="eanGtin">The invalid EAN/GTIN value.</param>
     [Theory(DisplayName = "Invalid EanGtin values should fail validation")]
     [InlineData("")]
     [InlineData("123")]

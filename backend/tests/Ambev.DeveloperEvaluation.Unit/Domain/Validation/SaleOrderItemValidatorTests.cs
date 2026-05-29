@@ -5,15 +5,25 @@ using Xunit;
 
 namespace Ambev.DeveloperEvaluation.Unit.Domain.Validation;
 
+/// <summary>
+/// Contains unit tests for the <see cref="SaleOrderItemValidator"/> class.
+/// Tests cover validation rules for sale order item identifiers, values, and quantity constraints.
+/// </summary>
 public class SaleOrderItemValidatorTests
 {
     private readonly SaleOrderItemValidator _validator;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SaleOrderItemValidatorTests"/> class.
+    /// </summary>
     public SaleOrderItemValidatorTests()
     {
         _validator = new SaleOrderItemValidator();
     }
 
+    /// <summary>
+    /// Tests that a valid sale order item passes all validation rules.
+    /// </summary>
     [Fact(DisplayName = "Valid sale order item should pass validation")]
     public void Given_ValidSaleOrderItem_When_Validated_Then_ShouldNotHaveErrors()
     {
@@ -27,6 +37,9 @@ public class SaleOrderItemValidatorTests
         result.ShouldNotHaveAnyValidationErrors();
     }
 
+    /// <summary>
+    /// Tests that an empty sale order identifier fails validation.
+    /// </summary>
     [Fact(DisplayName = "Empty sale order id should fail validation")]
     public void Given_EmptySaleOrderId_When_Validated_Then_ShouldHaveError()
     {
@@ -41,6 +54,10 @@ public class SaleOrderItemValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.SaleOrderId);
     }
 
+    /// <summary>
+    /// Tests that invalid price values fail validation.
+    /// </summary>
+    /// <param name="price">The invalid price value.</param>
     [Theory(DisplayName = "Invalid price should fail validation")]
     [InlineData(0)]
     [InlineData(-1)]
@@ -57,6 +74,10 @@ public class SaleOrderItemValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.Price);
     }
 
+    /// <summary>
+    /// Tests that invalid description lengths fail validation.
+    /// </summary>
+    /// <param name="description">The invalid description value.</param>
     [Theory(DisplayName = "Invalid description length should fail validation")]
     [InlineData("ab")]
     [InlineData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")]
@@ -73,6 +94,10 @@ public class SaleOrderItemValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.Description);
     }
 
+    /// <summary>
+    /// Tests that invalid amount values fail validation.
+    /// </summary>
+    /// <param name="amount">The invalid amount value.</param>
     [Theory(DisplayName = "Invalid amount should fail validation")]
     [InlineData(0)]
     [InlineData(-1)]
@@ -91,6 +116,10 @@ public class SaleOrderItemValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.Amount);
     }
 
+    /// <summary>
+    /// Tests that invalid EAN/GTIN values fail validation.
+    /// </summary>
+    /// <param name="eanGtin">The invalid EAN/GTIN value.</param>
     [Theory(DisplayName = "Invalid EanGtin should fail validation")]
     [InlineData("123")]
     [InlineData("abc1234567890")]
@@ -108,6 +137,10 @@ public class SaleOrderItemValidatorTests
         result.ShouldHaveValidationErrorFor(x => x.EanGtin);
     }
 
+    /// <summary>
+    /// Generates a valid sale order item for test setup.
+    /// </summary>
+    /// <returns>A valid <see cref="SaleOrderItem"/> instance.</returns>
     private static SaleOrderItem GenerateValidItem()
     {
         return new SaleOrderItem
