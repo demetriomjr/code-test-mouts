@@ -16,6 +16,5 @@ public class SaleOrderConfiguration : IEntityTypeConfiguration<SaleOrder>
         builder.Property(o => o.CustomerName).IsRequired().HasMaxLength(50);
         builder.Property(o => o.BranchName).IsRequired().HasMaxLength(50);
         builder.Property(o => o.CancelStatus).IsRequired();
-        builder.Property(o => o.Products).HasMaxLength(20).IsRequired();
     }
 }
