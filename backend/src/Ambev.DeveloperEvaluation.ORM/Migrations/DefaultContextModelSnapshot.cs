@@ -42,8 +42,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<bool>("IsCancelled")
-                        .HasColumnType("boolean");
+                    b.Property<int>("CancelStatus")
+                        .HasColumnType("integer");
 
                     b.Property<int>("OrderNumber")
                         .HasColumnType("integer");
@@ -82,8 +82,8 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("IsCancelled")
-                        .HasColumnType("boolean");
+                    b.Property<int>("CancelStatus")
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric");

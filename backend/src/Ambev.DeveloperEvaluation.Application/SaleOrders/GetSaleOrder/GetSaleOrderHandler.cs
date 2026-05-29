@@ -1,27 +1,29 @@
-using Ambev.DeveloperEvaluation.Application.orders.Common;
+using System.Diagnostics;
+using Ambev.DeveloperEvaluation.Application.SaleOrders.Common;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using FluentValidation;
 using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.orders.Getorder;
 
-public class GetorderHandler : IRequestHandler<GetorderCommand, GetorderResultCommon>
+namespace Ambev.DeveloperEvaluation.Application.SaleOrders.GetSaleOrder;
+
+public class GetOrderHandler : IRequestHandler<GetSaleOrderCommand, GetSaleOrderResultCommon>
 {
-    private readonly IorderRepository _orderRepository;
+    private readonly ISaleOrderRepository _orderRepository;
     private readonly IMapper _mapper;
 
-    public GetorderHandler(
-        IorderRepository orderRepository,
+    public GetOrderHandler(
+        ISaleOrderRepository orderRepository,
         IMapper mapper)
     {
         _orderRepository = orderRepository;
         _mapper = mapper;
     }
 
-    public async Task<GetorderResultCommon> Handle(GetorderCommand request, CancellationToken cancellationToken)
+    public async Task<GetSaleOrderResultCommon> Handle(GetSaleOrderCommand request, CancellationToken cancellationToken)
     {
-        var validator = new GetorderValidator();
+        var validator = new GetSaleOrderValidator();
         var validationResult = await validator.ValidateAsync(request, cancellationToken);
 
         if (!validationResult.IsValid)
@@ -31,6 +33,6 @@ public class GetorderHandler : IRequestHandler<GetorderCommand, GetorderResultCo
         if (order == null)
             throw new KeyNotFoundException($"Sale order with ID {request.Id} not found");
 
-        return _mapper.Map<GetorderResultCommon>(order);
+        return _mapper.Map<GetSaleOrderResultCommon>(order);
     }
 }

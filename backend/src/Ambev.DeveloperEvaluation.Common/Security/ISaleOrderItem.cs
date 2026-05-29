@@ -1,8 +1,10 @@
 
+using Ambev.DeveloperEvaluation.Domain.Enums;
+
 namespace Ambev.DeveloperEvaluation.Common.Security;
 
 public interface ISaleOrderItem
 {
     public Guid SaleOrderId { get; }
-    public bool IsCancelled { get; }
+    public CancelStatus CancelStatus { get; }
 }

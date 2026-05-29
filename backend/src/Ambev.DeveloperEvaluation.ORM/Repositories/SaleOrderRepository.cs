@@ -63,6 +63,13 @@ public class SaleOrderRepository : ISaleOrderRepository
         return result.Entity;
     }
 
+    public async Task<SaleOrder> UpdateAsync(SaleOrder order, CancellationToken cancellationToken = default)
+    {
+        _context.SaleOrders.Update(order);
+        await _context.SaveChangesAsync(cancellationToken);
+        return order;
+    }
+
     /// <summary>
     /// Gets the last valid order number persisted
     /// </summary>

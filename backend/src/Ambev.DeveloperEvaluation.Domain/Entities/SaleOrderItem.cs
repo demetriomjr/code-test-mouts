@@ -1,6 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Common.Security;
 using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Validation;
 using System.Linq;
 
@@ -9,7 +10,7 @@ namespace Ambev.DeveloperEvaluation.Domain.Entities;
 public class SaleOrderItem : BaseEntity, ISaleOrderItem
 {
     public Guid SaleOrderId { get; set; } = Guid.Empty;
-    public bool IsCancelled { get; set; } = false;
+    public CancelStatus CancelStatus { get; set; } = CancelStatus.NotCancelled;
     public string Ean_Gtin { get; set;} = string.Empty;
     public string Description { get; set ;} = string.Empty;
     public decimal Price { get; set; } = 0.00m;

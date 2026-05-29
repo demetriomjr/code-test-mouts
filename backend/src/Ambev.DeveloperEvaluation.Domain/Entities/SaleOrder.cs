@@ -1,5 +1,6 @@
 using Ambev.DeveloperEvaluation.Domain.Common;
 using Ambev.DeveloperEvaluation.Common.Validation;
+using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Validation;
 using System.Linq;
 
@@ -13,7 +14,7 @@ public class SaleOrder : BaseEntity
     public string BranchName { get; set; } = string.Empty;
     public decimal TotalSale  { get; set; } = 0.00m;
     public IEnumerable<SaleOrderItem> Products { get; set; } = [];
-    public bool IsCancelled { get; set; } = false;
+    public CancelStatus CancelStatus { get; set; } = CancelStatus.NotCancelled;
 
     public ValidationResultDetail Validate()
     {
@@ -26,11 +27,11 @@ public class SaleOrder : BaseEntity
         };
     }
 
-    public void SetIsCancelled(bool cancelled) => this.IsCancelled = cancelled;
+    public void SetCancelStatus(CancelStatus cancelStatus) => this.CancelStatus = cancelStatus;
 
     public void ApplyDiscountAndCalcTotal()
     {
-        foreach(var item in this.Products.Where(x => !x.IsCancelled))
+        foreach(var item in this.Products.Where(x => x.CancelStatus == CancelStatus.NotCancelled))
         {
             item.Discount = item.Amount switch
             {

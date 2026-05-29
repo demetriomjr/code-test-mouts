@@ -28,6 +28,7 @@ public interface ISaleOrderRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale order</returns>
     Task<SaleOrder> CreateAsync(SaleOrder order, CancellationToken cancellationToken = default);
+    Task<SaleOrder> UpdateAsync(SaleOrder order, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets the last valid order's number persisted
@@ -37,21 +38,4 @@ public interface ISaleOrderRepository
     Task<int> GetLastOrderNumber(CancellationToken cancellationToken = default);
 
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Set an order to cancelled
-    /// </summary>
-    /// <param name="orderId">Sale order's ID to cancel</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Sucess status</returns>
-    Task<bool> CancelOrderAsync(Guid orderId, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Set an order to cancelled
-    /// </summary>
-    /// <param name="orderId">Sale order's ID to cancel</param>
-    /// <param name="itemId">CProduct's ID to cancel</param>
-    /// <param name="cancellationToken">Cancellation token</param>
-    /// <returns>Sucess status</returns>
-    Task<bool> CancelOrderItemAsync(Guid orderId, Guid itemId, CancellationToken cancellationToken = default);
 }

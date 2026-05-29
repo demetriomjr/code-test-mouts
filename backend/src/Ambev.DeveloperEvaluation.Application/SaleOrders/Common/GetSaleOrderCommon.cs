@@ -1,3 +1,5 @@
+using Ambev.DeveloperEvaluation.Domain.Enums;
+
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.Common;
 
 /// <summary>
@@ -43,7 +45,7 @@ public class GetSaleOrderResultCommon
     /// <summary>
     /// Indicates whether the sale order has been cancelled
     /// </summary>
-    public bool IsCancelled { get; set; }
+    public CancelStatus CancelStatus { get; set; }
 
     /// <summary>
     /// The date and time when the sale order was created
@@ -69,7 +71,7 @@ public class GetSaleOrderItemResultCommon
     /// <summary>
     /// Indicates whether the item has been cancelled
     /// </summary>
-    public bool IsCancelled { get; set; }
+    public CancelStatus CancelStatus { get; set; }
 
     /// <summary>
     /// The GTIN/EAN code of the product

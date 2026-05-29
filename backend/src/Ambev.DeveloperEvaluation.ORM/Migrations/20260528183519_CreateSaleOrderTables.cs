@@ -35,7 +35,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                     CustomerName = table.Column<string>(type: "text", nullable: false),
                     BranchName = table.Column<string>(type: "text", nullable: false),
                     TotalSale = table.Column<decimal>(type: "numeric", nullable: false),
-                    IsCancelled = table.Column<bool>(type: "boolean", nullable: false),
+                    CancelStatus = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -50,7 +50,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SaleOrderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsCancelled = table.Column<bool>(type: "boolean", nullable: false),
+                    CancelStatus = table.Column<int>(type: "integer", nullable: false),
                     Ean_Gtin = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),

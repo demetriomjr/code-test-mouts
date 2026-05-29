@@ -1,3 +1,5 @@
+using Ambev.DeveloperEvaluation.Domain.Enums;
+
 namespace Ambev.DeveloperEvaluation.Application.SaleOrders.CreateSaleOrder;
 
 /// <summary>
@@ -43,7 +45,7 @@ public class CreateSaleOrderResult
     /// <summary>
     /// Gets or sets a value indicating whether the order is cancelled.
     /// </summary>
-    public bool IsCancelled { get; set; }
+    public CancelStatus CancelStatus { get; set; }
 
     /// <summary>
     /// Gets or sets the date and time when the order was created in persistence.
@@ -69,7 +71,7 @@ public class SaleOrderItemResult
     /// <summary>
     /// Gets or sets a value indicating whether this item is cancelled.
     /// </summary>
-    public bool IsCancelled { get; set; }
+    public CancelStatus CancelStatus { get; set; }
 
     /// <summary>
     /// Gets or sets the GTIN/EAN code of the product.

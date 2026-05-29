@@ -8,10 +8,10 @@ public class GetSaleOrdersRequest
     /// <summary>
     /// The current page number to retrieve
     /// </summary>
-    public int CurrentPage { get; set; } = 1
+    public int CurrentPage { get; set; } = 1;
 
     /// <summary>
     /// The number of items per page
     /// </summary>
-    public int PageSize { get; set; } = 20
+    public int PageSize { get; set; } = 20;
 }
